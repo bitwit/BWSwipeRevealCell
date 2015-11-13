@@ -9,10 +9,14 @@
 import Foundation
 import UIKit
 
+@objc public protocol BWSwipeRevealCellDelegate:BWSwipeCellDelegate {
+    optional func swipeCellActivatedAction(cell: BWSwipeCell, isActionLeft: Bool)
+}
+
 public class BWSwipeRevealCell: BWSwipeCell {
     
     public var backViewbackgroundColor: UIColor = UIColor(white: 0.92, alpha: 1)
-    var _backView: UIView?
+    private var _backView: UIView?
     public var backView: UIView? {
         if _backView == nil {
             _backView = UIView(frame: self.contentView.bounds)
@@ -29,7 +33,7 @@ public class BWSwipeRevealCell: BWSwipeCell {
     public var bgViewLeftImage: UIImage?
     public var bgViewRightImage: UIImage?
     
-    var _leftBackButton: UIButton?
+    private var _leftBackButton: UIButton?
     var leftBackButton:UIButton? {
         if _leftBackButton == nil {
             _leftBackButton = UIButton(frame: CGRectMake(0, 0, CGRectGetHeight(self.frame), CGRectGetHeight(self.frame)))
@@ -42,7 +46,7 @@ public class BWSwipeRevealCell: BWSwipeCell {
         return _leftBackButton
     }
     
-    var _rightBackButton: UIButton?
+    private var _rightBackButton: UIButton?
     var rightBackButton:UIButton? {
         if _rightBackButton == nil {
             _rightBackButton = UIButton(frame: CGRectMake(CGRectGetMaxX(self.contentView.frame), 0, CGRectGetHeight(self.frame), CGRectGetHeight(self.frame)))
@@ -124,6 +128,8 @@ public class BWSwipeRevealCell: BWSwipeCell {
         }
     }
     
+    // MARK: - Reveal Cell Animations
+    
     override func animateCellSpringRelease() {
         super.animateCellSpringRelease()
         let pointX = self.contentView.frame.origin.x
@@ -182,13 +188,15 @@ public class BWSwipeRevealCell: BWSwipeCell {
     func leftButtonTapped () {
         self.shouldCleanUpBackView = true
         self.animateCellSpringRelease()
-        self.delegate?.swipeCellActivatedAction?(self, isActionLeft: true)
+        let delegate = self.delegate as? BWSwipeRevealCellDelegate
+        delegate?.swipeCellActivatedAction?(self, isActionLeft: true)
     }
     
     func rightButtonTapped () {
         self.shouldCleanUpBackView = true
         self.animateCellSpringRelease()
-        self.delegate?.swipeCellActivatedAction?(self, isActionLeft: false)
+        let delegate = self.delegate as? BWSwipeRevealCellDelegate
+        delegate?.swipeCellActivatedAction?(self, isActionLeft: false)
     }
     
 }

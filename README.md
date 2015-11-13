@@ -25,6 +25,44 @@ func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexP
 }
 `
 
+### Customizing through the interface
+
+**var type:BWSwipeCellType**
+
+Can be `.SprintgRelease`, `.SwipeThrough` or `.SlidingDoor`. Defaults to `.SpringRelease`
+
+**var revealDirection: BWSwipeCellRevealDirection**
+
+Can be `.Both`, `.Left` or `.Right`. Defaults to `.Both`
+
+**(readonly) var state: BWSwipeCellState**
+
+Can be `.Normal`, `.PastThresholdLeft` or `.PastThresholdRight`
+
+**var threshold: CGFloat**
+
+The point at which pan elasticity starts, and `state` changes. Defaults to the height of the `UITableViewCell`
+
+**var progress:CGFloat**
+
+A number between 0 and 1 to indicate progress toward reaching threshold int the current swiping direction
+
+**var shouldExceedThreshold: Bool**
+
+Control whether or not the cell pans past the threshold point
+
+**var panElasticityFactor: CGFloat**
+
+Control how much elasticity there is past threshold, if it can be exceeded. Default is `0.7` and `1.0` would mean no elasticity
+
+**var animationDuration: Double**
+
+Animation duration. Defaults to `0.2`
+
+**weak var delegate: BWSwipeCellDelegate?**
+
+Set the delegate on the cell
+
 ### Roadmap
 Some brief ideas on ways to improve this library
 

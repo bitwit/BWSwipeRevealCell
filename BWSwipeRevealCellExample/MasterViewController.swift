@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 import BWSwipeRevealCell
 
-class MasterViewController: UITableViewController, NSFetchedResultsControllerDelegate, BWSwipeCellDelegate {
+class MasterViewController: UITableViewController, NSFetchedResultsControllerDelegate, BWSwipeRevealCellDelegate {
     
     var managedObjectContext: NSManagedObjectContext? = nil
     
@@ -30,6 +30,17 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             newManagedObject.setValue(i, forKey: "type")
         }
         
+        do {
+            try context.save()
+        } catch {
+            abort()
+        }
+    }
+    
+    func removeObjectAtIndexPath(indexPath:NSIndexPath) {
+        let context = self.fetchedResultsController.managedObjectContext
+        //Deleting objects regardless of done/delete for the purpose of this example
+        context.deleteObject(self.fetchedResultsController.objectAtIndexPath(indexPath) as! NSManagedObject)
         do {
             try context.save()
         } catch {
@@ -94,20 +105,11 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         }
         
         let fetchRequest = NSFetchRequest()
-        // Edit the entity name as appropriate.
         let entity = NSEntityDescription.entityForName("Event", inManagedObjectContext: self.managedObjectContext!)
         fetchRequest.entity = entity
-        
-        // Set the batch size to a suitable number.
         fetchRequest.fetchBatchSize = 20
-        
-        // Edit the sort key as appropriate.
         let sortDescriptor = NSSortDescriptor(key: "type", ascending: false)
-        
         fetchRequest.sortDescriptors = [sortDescriptor]
-        
-        // Edit the section name key path and cache name if appropriate.
-        // nil for section name key path means "no sections".
         let aFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.managedObjectContext!, sectionNameKeyPath: nil, cacheName: "Master")
         aFetchedResultsController.delegate = self
         _fetchedResultsController = aFetchedResultsController
@@ -155,18 +157,18 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         self.tableView.endUpdates()
     }
     
-    // MARK: -
+    // MARK: - Reveal Cell Delegate
+    
+    func swipeCellWillRelease(cell: BWSwipeCell) {
+        if cell.state != .Normal && cell.type != .SlidingDoor {
+            let indexPath: NSIndexPath = tableView.indexPathForCell(cell)!
+            self.removeObjectAtIndexPath(indexPath)
+        }
+    }
     
     func swipeCellActivatedAction(cell: BWSwipeCell, isActionLeft: Bool) {
         let indexPath: NSIndexPath = tableView.indexPathForCell(cell)!
-        let context = self.fetchedResultsController.managedObjectContext
-        //Deleting objects regardless of done/delete for the purpose of this example
-        context.deleteObject(self.fetchedResultsController.objectAtIndexPath(indexPath) as! NSManagedObject)
-        do {
-            try context.save()
-        } catch {
-            abort()
-        }
+        self.removeObjectAtIndexPath(indexPath)
     }
     
 }

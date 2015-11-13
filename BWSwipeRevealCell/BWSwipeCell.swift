@@ -29,27 +29,22 @@ public enum BWSwipeCellState {
     case PastThresholdRight
 }
 
-@objc public protocol BWSwipeCellDelegate:NSObjectProtocol {
+@objc public protocol BWSwipeCellDelegate: NSObjectProtocol {
     optional func swipeCellDidStartSwiping(cell: BWSwipeCell)
-    optional func swipeCellDidSwipe(cell: BWSwipeCell, point: CGPoint)
-    optional func swipeCellWillRelease(cell: BWSwipeCell, point: CGPoint)
+    optional func swipeCellDidSwipe(cell: BWSwipeCell)
+    optional func swipeCellWillRelease(cell: BWSwipeCell)
     optional func swipeCellDidCompleteRelease(cell: BWSwipeCell)
-    optional func swipeCellActivatedAction(cell: BWSwipeCell, isActionLeft: Bool)
 }
 
 public class BWSwipeCell:UITableViewCell {
     
-    public var type:BWSwipeCellType = .SpringRelease {
-        didSet {
-            if type == .SpringRelease {
-                panElasticity = true
-            } else {
-                panElasticity = false
-            }
-        }
-    }
+    public var type:BWSwipeCellType = .SpringRelease
     public var revealDirection: BWSwipeCellRevealDirection = .Both
-    public var state: BWSwipeCellState = .Normal
+    
+    private var _state: BWSwipeCellState = .Normal
+    public var state: BWSwipeCellState {
+        return _state
+    }
     
     //Threshold properties
     public lazy var threshold: CGFloat = {
@@ -62,20 +57,14 @@ public class BWSwipeCell:UITableViewCell {
         }
     }
     public var shouldExceedThreshold: Bool = true
-    
-    //Animation properties
-    public var animationDuration: Double = 0.2
-    
-    //Pan elasticity properties
-    public var panElasticity: Bool = true
     public var panElasticityFactor: CGFloat = 0.7
     
-    //Spring
-    public var springDamping: CGFloat = 0.6
-    
+    // Animation properties
+    public var animationDuration: Double = 0.2
+    // Delegate
     public weak var delegate: BWSwipeCellDelegate?
     
-    var _releaseCompletionBlock:((Bool) -> Void)?
+    private var _releaseCompletionBlock:((Bool) -> Void)?
     var releaseCompletionBlock:((Bool) -> Void)?  {
         if _releaseCompletionBlock == nil {
             _releaseCompletionBlock = {(finished: Bool) in
@@ -89,7 +78,6 @@ public class BWSwipeCell:UITableViewCell {
     // MARK: - Swipe Cell Functions
     
     public func initialize() {
-        print("initiliaizing cell")
         self.selectionStyle = .None
         self.contentView.backgroundColor = UIColor.whiteColor()
         let panGestureRecognizer: UIPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: "handlePanGesture:")
@@ -102,7 +90,7 @@ public class BWSwipeCell:UITableViewCell {
     }
     
     public func cleanUp() {
-        self.state = .Normal
+        _state = .Normal
     }
     
     func handlePanGesture(panGestureRecognizer: UIPanGestureRecognizer) {
@@ -110,14 +98,13 @@ public class BWSwipeCell:UITableViewCell {
         var panOffset: CGFloat = translation.x
         
         // If we have elasticity to consider, do some extra calculations for panOffset
-        if abs(translation.x) > self.threshold {
-            if self.panElasticity == true {
+        if self.type != .SwipeThrough && abs(translation.x) > self.threshold {
+            if self.shouldExceedThreshold {
                 let offset: CGFloat = abs(translation.x)
                 panOffset = offset - ((offset - self.threshold) * self.panElasticityFactor)
                 panOffset *= translation.x < 0 ? -1.0 : 1.0
-            }
-            // If we don't allow exceeding the threshold
-            if self.shouldExceedThreshold == false {
+            } else {
+                // If we don't allow exceeding the threshold
                 panOffset = translation.x < 0 ? -self.threshold : self.threshold
             }
         }
@@ -135,7 +122,7 @@ public class BWSwipeCell:UITableViewCell {
                 self.animateContentViewForPoint(actualTranslation)
             }
             else {
-                self.resetCellFromPoint(actualTranslation)
+                self.resetCellPosition()
             }
         }
     }
@@ -148,15 +135,15 @@ public class BWSwipeCell:UITableViewCell {
         if (point.x > 0 && self.revealDirection == .Left) || (point.x < 0 && self.revealDirection == .Right) || self.revealDirection == .Both {
             self.contentView.frame = CGRectOffset(self.contentView.bounds, point.x, 0)
             if point.x >= self.threshold {
-                self.state = .PastThresholdLeft
+                _state = .PastThresholdLeft
             }
             else if point.x < -self.threshold {
-                self.state = .PastThresholdRight
+                _state = .PastThresholdRight
             }
             else {
-                self.state = .Normal
+                _state = .Normal
             }
-            self.delegate?.swipeCellDidSwipe?(self, point: point)
+            self.delegate?.swipeCellDidSwipe?(self)
         }
         else {
             if (point.x > 0 && self.revealDirection == .Right) || (point.x < 0 && self.revealDirection == .Left) {
@@ -165,18 +152,8 @@ public class BWSwipeCell:UITableViewCell {
         }
     }
     
-    public func resetCellFromPoint(point:CGPoint) {
-        self.delegate?.swipeCellWillRelease?(self, point: point)
-        
-        //If this isn't a sliding door style and we're past threshold, report an activation
-        if self.state != .Normal && self.type != .SlidingDoor {
-            self.delegate?.swipeCellActivatedAction?(self, isActionLeft: self.state == .PastThresholdLeft)
-        }
-        
-        //if (self.revealDirection == .Left && point.x < 0) || (self.revealDirection == .Right && point.x > 0) {
-            //return
-        //}
-        
+    public func resetCellPosition() {
+        self.delegate?.swipeCellWillRelease?(self)
         if self.type == .SpringRelease || self.state == .Normal {
             self.animateCellSpringRelease()
         } else if self.type == .SlidingDoor {
