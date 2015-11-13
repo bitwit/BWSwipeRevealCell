@@ -4,6 +4,7 @@
 ### Using the library
 
 There are main classes available - `BWSwipeCell` and `BWSwipeRevealCell`
+
 **BWSwipeCell** - Only contains the pan gesture handling, and is useful mainly for heavy customization through subclassing
 
 **BWSwipeRevealCell** - Is an out of the box solution that lets you set images and colors for 1 action on the left and right of the table cell. BWSwipeRevealCell is a subclass of BWSwipeCell.
