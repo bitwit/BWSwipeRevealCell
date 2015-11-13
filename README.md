@@ -1,6 +1,8 @@
 
 # BWSwipeRevealCell
 
+![Example](https://raw.githubusercontent.com/bitwit/BWSwipeRevealCell/master/example.gif)
+
 ### Using the library
 
 There are main classes available - `BWSwipeCell` and `BWSwipeRevealCell`
@@ -12,7 +14,7 @@ There are main classes available - `BWSwipeCell` and `BWSwipeRevealCell`
 
 ### BWSwipeRevealCell Example
 After setting `BWSwipeRevealCell` as your table cell's type in the storyboard and setting a delegate. Use this code in your controller:
-`
+```swift
 func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
     let swipeCell:BWSwipeRevealCell = cell as! BWSwipeRevealCell
@@ -23,7 +25,7 @@ func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexP
     swipeCell.type = .SpringRelease
     return cell
 }
-`
+```
 
 ### Roadmap
 Some brief ideas on ways to improve this library
