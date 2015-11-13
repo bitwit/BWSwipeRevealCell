@@ -29,6 +29,8 @@ func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexP
 
 ### Customizing through the interface
 
+##### BWSwipeCell Properties
+
 **var type:BWSwipeCellType**
 
 Can be `.SpringRelease`, `.SwipeThrough` or `.SlidingDoor`. Defaults to `.SpringRelease`
@@ -64,6 +66,19 @@ Animation duration. Defaults to `0.2`
 **weak var delegate: BWSwipeCellDelegate?**
 
 Set the delegate on the cell
+
+##### BWSwipeRevealCell Properties
+
+**var bgViewInactiveColor: UIColor = UIColor.grayColor()**
+**var bgViewLeftColor: UIColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 1)**
+**var bgViewRightColor: UIColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 1)**
+
+Colors for inactive, and activated states for left and right
+
+**var bgViewLeftImage: UIImage?**
+**var bgViewRightImage: UIImage?**
+
+Images for the left and right actions
 
 ### Roadmap
 Some brief ideas on ways to improve this library
