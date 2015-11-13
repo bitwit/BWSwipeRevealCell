@@ -29,7 +29,7 @@ func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexP
 
 ### Customizing through the interface
 
-##### BWSwipeCell Properties
+#### BWSwipeCell Properties
 
 **var type:BWSwipeCellType**
 
@@ -67,7 +67,7 @@ Animation duration. Defaults to `0.2`
 
 Set the delegate on the cell
 
-##### BWSwipeRevealCell Properties
+#### BWSwipeRevealCell Properties
 
 **var bgViewInactiveColor: UIColor = UIColor.grayColor()**
 **var bgViewLeftColor: UIColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 1)**
