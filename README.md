@@ -1,18 +1,20 @@
 
 # BWSwipeRevealCell
 
+![Example](https://raw.githubusercontent.com/bitwit/BWSwipeRevealCell/master/example.gif)
+
 ### Using the library
 
-There are main classes available - `BWSwipeCell` and `BWSwipeRevealCell`
+There are two main classes available - `BWSwipeCell` and `BWSwipeRevealCell`
 
-**BWSwipeCell** - Only contains the pan gesture handling, and is useful mainly for heavy customization through subclassing
+**BWSwipeCell** - Only contains the pan gesture handling, and is useful mainly for heavy customization through subclassing if all you need is a leg up on swipe interactions
 
 **BWSwipeRevealCell** - Is an out of the box solution that lets you set images and colors for 1 action on the left and right of the table cell. BWSwipeRevealCell is a subclass of BWSwipeCell.
 
 
 ### BWSwipeRevealCell Example
 After setting `BWSwipeRevealCell` as your table cell's type in the storyboard and setting a delegate. Use this code in your controller:
-`
+```swift
 func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
     let swipeCell:BWSwipeRevealCell = cell as! BWSwipeRevealCell
@@ -23,7 +25,7 @@ func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexP
     swipeCell.type = .SpringRelease
     return cell
 }
-`
+```
 
 ### Customizing through the interface
 
