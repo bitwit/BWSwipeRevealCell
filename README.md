@@ -71,9 +71,9 @@ Set the delegate on the cell
 
 **var bgViewInactiveColor: UIColor = UIColor.grayColor()**
 
-**var bgViewLeftColor: UIColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 1)**
+**var bgViewLeftColor: UIColor**
 
-**var bgViewRightColor: UIColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 1)**
+**var bgViewRightColor: UIColor**
 
 Colors for inactive, and activated states for left and right
 
