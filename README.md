@@ -31,7 +31,7 @@ func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexP
 
 **var type:BWSwipeCellType**
 
-Can be `.SprintgRelease`, `.SwipeThrough` or `.SlidingDoor`. Defaults to `.SpringRelease`
+Can be `.SpringRelease`, `.SwipeThrough` or `.SlidingDoor`. Defaults to `.SpringRelease`
 
 **var revealDirection: BWSwipeCellRevealDirection**
 
@@ -43,7 +43,7 @@ Can be `.Normal`, `.PastThresholdLeft` or `.PastThresholdRight`
 
 **var threshold: CGFloat**
 
-The point at which pan elasticity starts, and `state` changes. Defaults to the height of the `UITableViewCell`
+The point at which pan elasticity starts, and `state` changes. Defaults to the height of the `UITableViewCell` (i.e. when it form a perfect square)
 
 **var progress:CGFloat**
 
