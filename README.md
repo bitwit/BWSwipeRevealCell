@@ -47,9 +47,9 @@ Can be `.Normal`, `.PastThresholdLeft` or `.PastThresholdRight`
 
 The point at which pan elasticity starts, and `state` changes. Defaults to the height of the `UITableViewCell` (i.e. when it form a perfect square)
 
-**var progress:CGFloat**
+**(readonly) var progress:CGFloat**
 
-A number between 0 and 1 to indicate progress toward reaching threshold int the current swiping direction
+A number between 0 and 1 to indicate progress toward reaching threshold in the current swiping direction. Useful for changing UI gradually as the user swipes.
 
 **var shouldExceedThreshold: Bool**
 
@@ -57,7 +57,7 @@ Control whether or not the cell pans past the threshold point
 
 **var panElasticityFactor: CGFloat**
 
-Control how much elasticity there is past threshold, if it can be exceeded. Default is `0.7` and `1.0` would mean no elasticity
+Control how much elasticity there is past threshold, if it can be exceeded. Default is `0.7` and `1.0` would mean no elastic resistance
 
 **var animationDuration: Double**
 
@@ -69,7 +69,7 @@ Set the delegate on the cell
 
 #### BWSwipeRevealCell Properties
 
-**var bgViewInactiveColor: UIColor = UIColor.grayColor()**
+**var bgViewInactiveColor: UIColor**
 
 **var bgViewLeftColor: UIColor**
 
