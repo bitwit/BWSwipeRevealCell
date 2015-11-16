@@ -38,30 +38,41 @@ public enum BWSwipeCellState {
 
 public class BWSwipeCell:UITableViewCell {
     
+    // The interaction type for this table cell
     public var type:BWSwipeCellType = .SpringRelease
+    
+    // The allowable swipe direction(s)
     public var revealDirection: BWSwipeCellRevealDirection = .Both
     
+    // The current state of the cell (either normal or past a threshold)
     private var _state: BWSwipeCellState = .Normal
     public var state: BWSwipeCellState {
         return _state
     }
     
-    //Threshold properties
+    // The point at which pan elasticity starts, and `state` changes. Defaults to the height of the `UITableViewCell` (i.e. when it form a perfect square)
     public lazy var threshold: CGFloat = {
         return self.frame.height
     }()
+    
+    // A number between 0 and 1 to indicate progress toward reaching threshold in the current swiping direction. Useful for changing UI gradually as the user swipes.
     public var progress: CGFloat {
         get {
             let progress = abs(self.contentView.frame.origin.x) / self.threshold
             return (progress > 1) ? 1 : progress
         }
     }
+    
+    // Should we allow the cell to be pulled past the threshold at all? (.SwipeThrough cells will ignore this)
     public var shouldExceedThreshold: Bool = true
+    
+    // Control how much elastic resistance there is past threshold, if it can be exceeded. Default is `0.7` and `1.0` would mean no elastic resistance
     public var panElasticityFactor: CGFloat = 0.7
     
-    // Animation properties
+    // Length of the animation on release
     public var animationDuration: Double = 0.2
-    // Delegate
+    
+    // BWSwipeCell Delegate
     public weak var delegate: BWSwipeCellDelegate?
     
     private var _releaseCompletionBlock:((Bool) -> Void)?
