@@ -160,6 +160,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     // MARK: - Reveal Cell Delegate
     
     func swipeCellWillRelease(cell: BWSwipeCell) {
+        print("Swipe Cell Will Release")
         if cell.state != .Normal && cell.type != .SlidingDoor {
             let indexPath: NSIndexPath = tableView.indexPathForCell(cell)!
             self.removeObjectAtIndexPath(indexPath)
@@ -167,8 +168,25 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     }
     
     func swipeCellActivatedAction(cell: BWSwipeCell, isActionLeft: Bool) {
+        print("Swipe Cell Activated Action")
         let indexPath: NSIndexPath = tableView.indexPathForCell(cell)!
         self.removeObjectAtIndexPath(indexPath)
+    }
+    
+    func swipeCellDidPassThreshold(cell: BWSwipeCell) {
+        print("Swipe Cell Did Pass Threshold")
+    }
+    
+    func swipeCellDidCompleteRelease(cell: BWSwipeCell) {
+        print("Swipe Cell Did Complete Release")
+    }
+    
+    func swipeCellDidSwipe(cell: BWSwipeCell) {
+        print("Swipe Cell Did Swipe")
+    }
+    
+    func swipeCellDidStartSwiping(cell: BWSwipeCell) {
+        print("Swipe Cell Did Start Swiping")
     }
     
 }
