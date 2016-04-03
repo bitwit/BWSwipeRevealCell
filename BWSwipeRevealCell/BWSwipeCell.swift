@@ -143,16 +143,19 @@ public class BWSwipeCell:UITableViewCell {
     public func animateContentViewForPoint(point: CGPoint) {
         if (point.x > 0 && self.revealDirection == .Left) || (point.x < 0 && self.revealDirection == .Right) || self.revealDirection == .Both {
             self.contentView.frame = CGRectOffset(self.contentView.bounds, point.x, 0)
+            let previousState = state
             if point.x >= self.threshold {
                 self.state = .PastThresholdLeft
-                self.delegate?.swipeCellDidPassThreshold?(self)
             }
             else if point.x < -self.threshold {
                 self.state = .PastThresholdRight
-                self.delegate?.swipeCellDidPassThreshold?(self)
             }
             else {
                 self.state = .Normal
+            }
+            
+            if self.state != .Normal && self.state != previousState {
+                self.delegate?.swipeCellDidPassThreshold?(self)
             }
             self.delegate?.swipeCellDidSwipe?(self)
         }
