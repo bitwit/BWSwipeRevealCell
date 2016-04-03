@@ -46,10 +46,7 @@ public class BWSwipeCell:UITableViewCell {
     public var revealDirection: BWSwipeCellRevealDirection = .Both
     
     // The current state of the cell (either normal or past a threshold)
-    private var _state: BWSwipeCellState = .Normal
-    public var state: BWSwipeCellState {
-        return _state
-    }
+    public private(set) var state: BWSwipeCellState = .Normal
     
     // The point at which pan elasticity starts, and `state` changes. Defaults to the height of the `UITableViewCell` (i.e. when it form a perfect square)
     public lazy var threshold: CGFloat = {
@@ -76,16 +73,16 @@ public class BWSwipeCell:UITableViewCell {
     // BWSwipeCell Delegate
     public weak var delegate: BWSwipeCellDelegate?
     
-    private var _releaseCompletionBlock:((Bool) -> Void)?
-    var releaseCompletionBlock:((Bool) -> Void)?  {
-        if _releaseCompletionBlock == nil {
-            _releaseCompletionBlock = {(finished: Bool) in
-                self.delegate?.swipeCellDidCompleteRelease?(self)
-                self.cleanUp()
-            }
+    private lazy var releaseCompletionBlock:((Bool) -> Void)? = {
+        return {
+            [weak self] (finished: Bool) in
+            
+            guard let this = self else { return }
+            
+            this.delegate?.swipeCellDidCompleteRelease?(this)
+            this.cleanUp()
         }
-        return _releaseCompletionBlock
-    }
+    }()
     
     // MARK: - Swipe Cell Functions
     
@@ -102,7 +99,7 @@ public class BWSwipeCell:UITableViewCell {
     }
     
     public func cleanUp() {
-        _state = .Normal
+        self.state = .Normal
     }
     
     func handlePanGesture(panGestureRecognizer: UIPanGestureRecognizer) {
@@ -147,15 +144,15 @@ public class BWSwipeCell:UITableViewCell {
         if (point.x > 0 && self.revealDirection == .Left) || (point.x < 0 && self.revealDirection == .Right) || self.revealDirection == .Both {
             self.contentView.frame = CGRectOffset(self.contentView.bounds, point.x, 0)
             if point.x >= self.threshold {
-                _state = .PastThresholdLeft
+                self.state = .PastThresholdLeft
                 self.delegate?.swipeCellDidPassThreshold?(self)
             }
             else if point.x < -self.threshold {
-                _state = .PastThresholdRight
+                self.state = .PastThresholdRight
                 self.delegate?.swipeCellDidPassThreshold?(self)
             }
             else {
-                _state = .Normal
+                self.state = .Normal
             }
             self.delegate?.swipeCellDidSwipe?(self)
         }
