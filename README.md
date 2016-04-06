@@ -17,12 +17,13 @@ After setting `BWSwipeRevealCell` as your table cell's type in the storyboard an
 ```swift
 func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
-    let swipeCell:BWSwipeRevealCell = cell as! BWSwipeRevealCell
-    swipeCell.bgViewLeftImage = UIImage(named:"Done")!.imageWithRenderingMode(.AlwaysTemplate)
-    swipeCell.bgViewLeftColor = UIColor.greenColor()
-    swipeCell.bgViewRightImage = UIImage(named:"Delete")!.imageWithRenderingMode(.AlwaysTemplate)
-    swipeCell.bgViewRightColor = UIColor.redColor()
-    swipeCell.type = .SpringRelease
+    if let swipeCell = cell as? BWSwipeRevealCell {
+        swipeCell.bgViewLeftImage = UIImage(named:"Done")!.imageWithRenderingMode(.AlwaysTemplate)
+        swipeCell.bgViewLeftColor = UIColor.greenColor()
+        swipeCell.bgViewRightImage = UIImage(named:"Delete")!.imageWithRenderingMode(.AlwaysTemplate)
+        swipeCell.bgViewRightColor = UIColor.redColor()
+        swipeCell.type = .SpringRelease
+    }
     return cell
 }
 ```
@@ -105,17 +106,14 @@ Set the delegate on the cell
 ### Roadmap
 Some brief ideas on ways to improve this library
 
-##### v 0.1.0
-- Release as Cocoapod
-
-##### v 0.x.0
+##### v 1.x.0
 - Fix bugs
 - More code commentary
 - Identify and remove any code redundancy
 
-##### v 1.0.0
+##### v 2.0.0
 - Any breaking changes (protocol, method names etc)
 
-##### v x.0.0
+##### v x.0.0 (a.k.a. Ideas. PRs welcome.)
 - Customizable interaction per side (i.e. left .SwipeThrough, right .SlidingDoor)
 - Possible subclass for allowing .SlidingDoor to convert to .SwipeThrough past a threshold point (see Mail.app)
