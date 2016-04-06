@@ -34,7 +34,7 @@ public enum BWSwipeCellState {
     optional func swipeCellDidSwipe(cell: BWSwipeCell)
     optional func swipeCellWillRelease(cell: BWSwipeCell)
     optional func swipeCellDidCompleteRelease(cell: BWSwipeCell)
-    optional func swipeCellDidPassThreshold(cell: BWSwipeCell)
+    optional func swipeCellDidChangeState(cell: BWSwipeCell)
 }
 
 public class BWSwipeCell:UITableViewCell {
@@ -154,8 +154,8 @@ public class BWSwipeCell:UITableViewCell {
                 self.state = .Normal
             }
             
-            if self.state != .Normal && self.state != previousState {
-                self.delegate?.swipeCellDidPassThreshold?(self)
+            if self.state != previousState {
+                self.delegate?.swipeCellDidChangeState?(self)
             }
             self.delegate?.swipeCellDidSwipe?(self)
         }

@@ -173,8 +173,13 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         self.removeObjectAtIndexPath(indexPath)
     }
     
-    func swipeCellDidPassThreshold(cell: BWSwipeCell) {
-        print("Swipe Cell Did Pass Threshold")
+    func swipeCellDidChangeState(cell: BWSwipeCell) {
+        print("Swipe Cell Did Change State")
+        if cell.state != .Normal {
+            print("-> Cell Passed Threshold")
+        } else {
+            print("-> Cell Returned to Normal")
+        }
     }
     
     func swipeCellDidCompleteRelease(cell: BWSwipeCell) {
