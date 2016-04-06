@@ -18,7 +18,33 @@
 		752EDC871BF65880007ED36D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 752EDC851BF65880007ED36D /* LaunchScreen.storyboard */; };
 		752EDC8D1BF659C7007ED36D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 752EDC8C1BF659C7007ED36D /* Assets.xcassets */; };
 		752EDC8F1BF65C68007ED36D /* example.gif in Resources */ = {isa = PBXBuildFile; fileRef = 752EDC8E1BF65C68007ED36D /* example.gif */; };
+		75ABE4201C0F88AD00F42894 /* BWSwipeRevealCell.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 752EDC601BF64B5B007ED36D /* BWSwipeRevealCell.framework */; };
+		75ABE4221C0F8AF300F42894 /* BWSwipeRevealCell.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 752EDC601BF64B5B007ED36D /* BWSwipeRevealCell.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		75ABE4231C0F8AF300F42894 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 752EDC571BF64B5B007ED36D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 752EDC5F1BF64B5B007ED36D;
+			remoteInfo = BWSwipeRevealCell;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		75ABE4251C0F8AF300F42894 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				75ABE4221C0F8AF300F42894 /* BWSwipeRevealCell.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		752EDC601BF64B5B007ED36D /* BWSwipeRevealCell.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BWSwipeRevealCell.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -50,6 +76,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				75ABE4201C0F88AD00F42894 /* BWSwipeRevealCell.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -140,10 +167,12 @@
 				752EDC711BF65880007ED36D /* Sources */,
 				752EDC721BF65880007ED36D /* Frameworks */,
 				752EDC731BF65880007ED36D /* Resources */,
+				75ABE4251C0F8AF300F42894 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				75ABE4241C0F8AF300F42894 /* PBXTargetDependency */,
 			);
 			name = BWSwipeRevealCellExample;
 			productName = BWSwipeRevealCellExample;
@@ -230,6 +259,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		75ABE4241C0F8AF300F42894 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 752EDC5F1BF64B5B007ED36D /* BWSwipeRevealCell */;
+			targetProxy = 75ABE4231C0F8AF300F42894 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		752EDC801BF65880007ED36D /* Main.storyboard */ = {
@@ -376,6 +413,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = BWSwipeRevealCellExample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ca.bitwit.BWSwipeRevealCellExample;
@@ -387,6 +425,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = BWSwipeRevealCellExample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ca.bitwit.BWSwipeRevealCellExample;
@@ -422,6 +461,7 @@
 				752EDC8A1BF65880007ED36D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

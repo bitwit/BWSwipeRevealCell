@@ -67,6 +67,16 @@ Animation duration. Defaults to `0.2`
 
 Set the delegate on the cell
 
+```swift
+@objc public protocol BWSwipeCellDelegate: NSObjectProtocol {
+    optional func swipeCellDidStartSwiping(cell: BWSwipeCell)
+    optional func swipeCellDidSwipe(cell: BWSwipeCell)
+    optional func swipeCellWillRelease(cell: BWSwipeCell)
+    optional func swipeCellDidCompleteRelease(cell: BWSwipeCell)
+    optional func swipeCellDidChangeState(cell: BWSwipeCell)
+}
+```
+
 #### BWSwipeRevealCell Properties
 
 **var bgViewInactiveColor: UIColor**
@@ -83,6 +93,15 @@ Colors for inactive, and activated states for left and right
 
 Images for the left and right actions
 
+**weak var delegate: BWSwipeRevealCellDelegate?**
+
+```swift
+@objc public protocol BWSwipeRevealCellDelegate:BWSwipeCellDelegate {
+    optional func swipeCellActivatedAction(cell: BWSwipeCell, isActionLeft: Bool)
+}
+```
+
+Set the delegate on the cell
 ### Roadmap
 Some brief ideas on ways to improve this library
 
