@@ -30,6 +30,7 @@ public enum BWSwipeCellState {
 }
 
 @objc public protocol BWSwipeCellDelegate: NSObjectProtocol {
+    optional func swipeCellShouldStartSwiping(cell: BWSwipeCell) -> Bool
     optional func swipeCellDidStartSwiping(cell: BWSwipeCell)
     optional func swipeCellDidSwipe(cell: BWSwipeCell)
     optional func swipeCellWillRelease(cell: BWSwipeCell)
@@ -105,6 +106,11 @@ public class BWSwipeCell:UITableViewCell {
     func handlePanGesture(panGestureRecognizer: UIPanGestureRecognizer) {
         let translation: CGPoint = panGestureRecognizer.translationInView(panGestureRecognizer.view)
         var panOffset: CGFloat = translation.x
+        
+        let shouldStartSwiping = delegate?.swipeCellShouldStartSwiping?(self) ?? true
+        guard shouldStartSwiping else {
+            return
+        }
         
         // If we have elasticity to consider, do some extra calculations for panOffset
         if self.type != .SwipeThrough && abs(translation.x) > self.threshold {
