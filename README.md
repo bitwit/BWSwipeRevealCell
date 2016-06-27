@@ -112,7 +112,7 @@ Some brief ideas on ways to improve this library
 - Identify and remove any code redundancy
 
 ##### v 2.0.0
-- Any breaking changes (protocol, method names etc)
+- [See Github Milestone](https://github.com/bitwit/BWSwipeRevealCell/milestones/Version%202.0.0)
 
 ##### v x.0.0 (a.k.a. Ideas. PRs welcome.)
 - Customizable interaction per side (i.e. left .SwipeThrough, right .SlidingDoor)
