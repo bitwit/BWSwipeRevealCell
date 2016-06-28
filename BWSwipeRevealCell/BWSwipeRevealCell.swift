@@ -34,7 +34,7 @@ public class BWSwipeRevealCell: BWSwipeCell {
     public var bgViewRightImage: UIImage?
     
     private var _leftBackButton: UIButton?
-    var leftBackButton:UIButton? {
+    public var leftBackButton:UIButton? {
         if _leftBackButton == nil {
             _leftBackButton = UIButton(frame: CGRectMake(0, 0, CGRectGetHeight(self.frame), CGRectGetHeight(self.frame)))
             _leftBackButton!.setImage(self.bgViewLeftImage, forState: .Normal)
@@ -47,7 +47,7 @@ public class BWSwipeRevealCell: BWSwipeCell {
     }
     
     private var _rightBackButton: UIButton?
-    var rightBackButton:UIButton? {
+    public var rightBackButton:UIButton? {
         if _rightBackButton == nil {
             _rightBackButton = UIButton(frame: CGRectMake(CGRectGetMaxX(self.contentView.frame), 0, CGRectGetHeight(self.frame), CGRectGetHeight(self.frame)))
             _rightBackButton!.setImage(self.bgViewRightImage, forState: .Normal)
@@ -91,7 +91,7 @@ public class BWSwipeRevealCell: BWSwipeCell {
         }
     }
     
-    override func didStartSwiping() {
+    public override func didStartSwiping() {
         super.didStartSwiping()
         self.backgroundView!.addSubview(self.backView!)
     }
@@ -130,7 +130,7 @@ public class BWSwipeRevealCell: BWSwipeCell {
     
     // MARK: - Reveal Cell Animations
     
-    override func animateCellSpringRelease() {
+    public override func animateCellSpringRelease() {
         super.animateCellSpringRelease()
         let pointX = self.contentView.frame.origin.x
         UIView.animateWithDuration(self.animationDuration,
@@ -145,7 +145,7 @@ public class BWSwipeRevealCell: BWSwipeCell {
             }, completion: nil)
     }
     
-    override func animateCellSwipeThrough() {
+    public override func animateCellSwipeThrough() {
         super.animateCellSwipeThrough()
         let pointX = self.contentView.frame.origin.x
         UIView.animateWithDuration(self.animationDuration,
@@ -160,14 +160,14 @@ public class BWSwipeRevealCell: BWSwipeCell {
             }, completion: nil)
     }
     
-    override func animateCellSlidingDoor() {
+    public override func animateCellSlidingDoor() {
         super.animateCellSlidingDoor()
         self.shouldCleanUpBackView = false
     }
     
     // MARK: - Reveal Cell
     
-    func getBackgroundViewImagesMaxX(x:CGFloat) -> CGFloat {
+    public func getBackgroundViewImagesMaxX(x:CGFloat) -> CGFloat {
         if x > 0 {
             let frame = self.leftBackButton!.frame
             if self.type == .SwipeThrough {
@@ -185,14 +185,14 @@ public class BWSwipeRevealCell: BWSwipeCell {
         }
     }
     
-    func leftButtonTapped () {
+    public func leftButtonTapped () {
         self.shouldCleanUpBackView = true
         self.animateCellSpringRelease()
         let delegate = self.delegate as? BWSwipeRevealCellDelegate
         delegate?.swipeCellActivatedAction?(self, isActionLeft: true)
     }
     
-    func rightButtonTapped () {
+    public func rightButtonTapped () {
         self.shouldCleanUpBackView = true
         self.animateCellSpringRelease()
         let delegate = self.delegate as? BWSwipeRevealCellDelegate
