@@ -18,6 +18,7 @@
 		752EDC871BF65880007ED36D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 752EDC851BF65880007ED36D /* LaunchScreen.storyboard */; };
 		752EDC8D1BF659C7007ED36D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 752EDC8C1BF659C7007ED36D /* Assets.xcassets */; };
 		752EDC8F1BF65C68007ED36D /* example.gif in Resources */ = {isa = PBXBuildFile; fileRef = 752EDC8E1BF65C68007ED36D /* example.gif */; };
+		7563A67C1D09C82400A53142 /* BWSwipeableViewHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7563A67B1D09C82400A53142 /* BWSwipeableViewHandler.swift */; };
 		75ABE4201C0F88AD00F42894 /* BWSwipeRevealCell.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 752EDC601BF64B5B007ED36D /* BWSwipeRevealCell.framework */; };
 		75ABE4221C0F8AF300F42894 /* BWSwipeRevealCell.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 752EDC601BF64B5B007ED36D /* BWSwipeRevealCell.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -62,6 +63,7 @@
 		752EDC881BF65880007ED36D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		752EDC8C1BF659C7007ED36D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		752EDC8E1BF65C68007ED36D /* example.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = example.gif; sourceTree = "<group>"; };
+		7563A67B1D09C82400A53142 /* BWSwipeableViewHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BWSwipeableViewHandler.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +108,7 @@
 		752EDC621BF64B5B007ED36D /* BWSwipeRevealCell */ = {
 			isa = PBXGroup;
 			children = (
+				7563A67B1D09C82400A53142 /* BWSwipeableViewHandler.swift */,
 				752EDC6D1BF654F8007ED36D /* BWSwipeCell.swift */,
 				752EDC6E1BF654F8007ED36D /* BWSwipeRevealCell.swift */,
 				752EDC631BF64B5B007ED36D /* BWSwipeRevealCell.h */,
@@ -191,9 +194,11 @@
 				TargetAttributes = {
 					752EDC5F1BF64B5B007ED36D = {
 						CreatedOnToolsVersion = 7.1;
+						LastSwiftMigration = 0800;
 					};
 					752EDC741BF65880007ED36D = {
 						CreatedOnToolsVersion = 7.1;
+						LastSwiftMigration = 0800;
 					};
 				};
 			};
@@ -243,6 +248,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				752EDC6C1BF65169007ED36D /* README.md in Sources */,
+				7563A67C1D09C82400A53142 /* BWSwipeableViewHandler.swift in Sources */,
 				752EDC701BF654F8007ED36D /* BWSwipeRevealCell.swift in Sources */,
 				752EDC6F1BF654F8007ED36D /* BWSwipeCell.swift in Sources */,
 			);
@@ -390,6 +396,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = ca.bitwit.BWSwipeRevealCell;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -406,6 +413,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = ca.bitwit.BWSwipeRevealCell;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -418,6 +426,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ca.bitwit.BWSwipeRevealCellExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -430,6 +439,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ca.bitwit.BWSwipeRevealCellExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
