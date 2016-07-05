@@ -19,7 +19,7 @@ import UIKit
 
 public class SwipeCell: UITableViewCell {
     
-    public private(set) var swipeHandler: SwipeViewHandler!
+    public private(set) var swipeHandler: SwipeHandler!
     public var delegate: SwipeCellDelegate?
     
     override public init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -54,30 +54,30 @@ public class SwipeCell: UITableViewCell {
             backgroundView = bv
         }
         
-        swipeHandler = SwipeViewHandler(contentView: contentView, backgroundView: bv)
+        swipeHandler = SwipeHandler(contentView: contentView, backgroundView: bv)
         swipeHandler.delegate = self
     }
 }
 
-extension SwipeCell: SwipeViewHandlerDelegate {
+extension SwipeCell: SwipeHandlerDelegate {
     
-    public func swipeViewDidStartSwiping(_ handler: SwipeViewHandler) {
+    public func swipeHandlerDidStartSwiping(_ handler: SwipeHandler) {
         delegate?.swipeCellDidStartSwiping?(self)
     }
 
-    public func swipeViewDidSwipe(_ handler: SwipeViewHandler) {
+    public func swipeHandlerDidSwipe(_ handler: SwipeHandler) {
         delegate?.swipeCellDidSwipe?(self)
     }
     
-    public func swipeViewWillRelease(_ handler: SwipeViewHandler) {
+    public func swipeHandlerWillRelease(_ handler: SwipeHandler) {
         delegate?.swipeCellWillRelease?(self)
     }
     
-    public func swipeViewDidCompleteRelease(_ handler: SwipeViewHandler) {
+   public func swipeHandlerDidCompleteRelease(_ handler: SwipeHandler) {
         delegate?.swipeCellDidCompleteRelease?(self)
     }
     
-    public func swipeViewDidChangeState(_ handler: SwipeViewHandler) {
+    public func swipeHandlerDidChangeState(_ handler: SwipeHandler) {
         delegate?.swipeCellDidChangeState?(self)
     }
     

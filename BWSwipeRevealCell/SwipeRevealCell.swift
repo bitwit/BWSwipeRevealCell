@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 @objc public protocol SwipeRevealCellDelegate:SwipeCellDelegate {
-    @objc optional func swipeCellActivatedAction(_ cell: SwipeCell, isActionLeft: Bool)
+    @objc optional func swipeRevealCell(_ cell: SwipeCell, activatedAction isActionLeft: Bool)
 }
 
 public class SwipeRevealCell: SwipeCell {
@@ -91,15 +91,15 @@ public class SwipeRevealCell: SwipeCell {
         super.layoutSubviews()
     }
     
-    override public func swipeViewDidStartSwiping(_ handler: SwipeViewHandler) {
+    override public func swipeHandlerDidStartSwiping(_ handler: SwipeHandler) {
         
-        super.swipeViewDidStartSwiping(handler)
+        super.swipeHandlerDidStartSwiping(handler)
         self.backgroundView!.addSubview(self.backView!)
     }
     
-    override public func swipeViewWillRelease(_ handler: SwipeViewHandler) {
+    override public func swipeHandlerWillRelease(_ handler: SwipeHandler) {
         
-        super.swipeViewWillRelease(handler)
+        super.swipeHandlerWillRelease(handler)
         
         if handler.type == .springRelease || handler.state == .normal {
             self.animateCellSpringRelease()
@@ -110,10 +110,9 @@ public class SwipeRevealCell: SwipeCell {
         }
     }
     
-    override public func swipeViewDidSwipe(_ handler: SwipeViewHandler) {
+    override public func swipeHandlerDidSwipe(_ handler: SwipeHandler) {
         
-        super.swipeViewDidSwipe(handler)
-        //TODO: integrate with content animation
+        super.swipeHandlerDidSwipe(handler)
         
         let position = handler.contentView.frame.origin
         animateContentViewForPoint(position, progress: handler.progress)
@@ -188,6 +187,7 @@ public class SwipeRevealCell: SwipeCell {
         self.shouldCleanUpBackView = false
     }
     
+    
     // MARK: - Reveal Cell
     
     public func getBackgroundViewImagesMaxX(_ x:CGFloat) -> CGFloat {
@@ -212,13 +212,15 @@ public class SwipeRevealCell: SwipeCell {
         self.shouldCleanUpBackView = true
         self.animateCellSpringRelease()
         let delegate = self.delegate as? SwipeRevealCellDelegate
-        delegate?.swipeCellActivatedAction?(self, isActionLeft: true)
+        
+        delegate?.swipeRevealCell?(self, activatedAction: true)
     }
     
     public func rightButtonTapped () {
         self.shouldCleanUpBackView = true
         self.animateCellSpringRelease()
         let delegate = self.delegate as? SwipeRevealCellDelegate
-        delegate?.swipeCellActivatedAction?(self, isActionLeft: false)
+        
+        delegate?.swipeRevealCell?(self, activatedAction: false)
     }
 }

@@ -2,12 +2,12 @@ import Foundation
 import UIKit
 
 
-@objc public protocol SwipeViewHandlerDelegate: NSObjectProtocol {
-    @objc optional func swipeViewDidStartSwiping(_ handler: SwipeViewHandler)
-    @objc optional func swipeViewDidSwipe(_ handler: SwipeViewHandler)
-    @objc optional func swipeViewWillRelease(_ handler: SwipeViewHandler)
-    @objc optional func swipeViewDidCompleteRelease(_ handler: SwipeViewHandler)
-    @objc optional func swipeViewDidChangeState(_ handler: SwipeViewHandler)
+@objc public protocol SwipeHandlerDelegate: NSObjectProtocol {
+    @objc optional func swipeHandlerDidStartSwiping(_ handler: SwipeHandler)
+    @objc optional func swipeHandlerDidSwipe(_ handler: SwipeHandler)
+    @objc optional func swipeHandlerWillRelease(_ handler: SwipeHandler)
+    @objc optional func swipeHandlerDidCompleteRelease(_ handler: SwipeHandler)
+    @objc optional func swipeHandlerDidChangeState(_ handler: SwipeHandler)
 }
 
 //Defines the interaction type of the table cell
@@ -30,7 +30,7 @@ public enum State {
     case pastThresholdRight
 }
 
-public class SwipeViewHandler: NSObject {
+public class SwipeHandler: NSObject {
     
     public let backgroundView: UIView
     public let contentView: UIView
@@ -67,7 +67,7 @@ public class SwipeViewHandler: NSObject {
     public var animationDuration: Double = 0.2
     
     // BWSwipeCell Delegate
-    public weak var delegate: SwipeViewHandlerDelegate?
+    public weak var delegate: SwipeHandlerDelegate?
     
     public lazy var releaseCompletionBlock:((Bool) -> Void)? = {
         return {
@@ -75,7 +75,7 @@ public class SwipeViewHandler: NSObject {
             
             guard let this = self else { return }
             
-            this.delegate?.swipeViewDidCompleteRelease?(this)
+            this.delegate?.swipeHandlerDidCompleteRelease?(this)
             this.cleanUp()
         }
     }()
@@ -91,7 +91,7 @@ public class SwipeViewHandler: NSObject {
         
         super.init()
         
-        let panGestureRecognizer: UIPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(SwipeViewHandler.handlePanGesture(_:)))
+        let panGestureRecognizer: UIPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(SwipeHandler.handlePanGesture(_:)))
         panGestureRecognizer.delegate = self
         contentView.addGestureRecognizer(panGestureRecognizer)
     }
@@ -137,7 +137,7 @@ public class SwipeViewHandler: NSObject {
     }
     
     public func didStartSwiping() {
-        delegate?.swipeViewDidStartSwiping?(self)
+        delegate?.swipeHandlerDidStartSwiping?(self)
     }
     
     public func animateContentViewForPoint(_ point: CGPoint) {
@@ -155,9 +155,9 @@ public class SwipeViewHandler: NSObject {
             }
             
             if self.state != previousState {
-                delegate?.swipeViewDidChangeState?(self)
+                delegate?.swipeHandlerDidChangeState?(self)
             }
-            delegate?.swipeViewDidSwipe?(self)
+            delegate?.swipeHandlerDidSwipe?(self)
         }
         else {
             if (point.x > 0 && self.revealDirection == .right) || (point.x < 0 && self.revealDirection == .left) {
@@ -168,7 +168,7 @@ public class SwipeViewHandler: NSObject {
     
     public func resetCellPosition() {
         
-        delegate?.swipeViewWillRelease?(self)
+        delegate?.swipeHandlerWillRelease?(self)
         
         if self.type == .springRelease || self.state == .normal {
             self.animateCellSpringRelease()
@@ -218,7 +218,7 @@ public class SwipeViewHandler: NSObject {
 
 }
 
-extension SwipeViewHandler: UIGestureRecognizerDelegate {
+extension SwipeHandler: UIGestureRecognizerDelegate {
     
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         if gestureRecognizer is UIPanGestureRecognizer && self.revealDirection != .none {
