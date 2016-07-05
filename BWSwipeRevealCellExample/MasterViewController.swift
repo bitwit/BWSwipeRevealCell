@@ -80,7 +80,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         swipeCell.bgViewRightColor = UIColor.red()
         
         let type = InteractionType(rawValue: object.value(forKey: "type") as! Int)!
-        swipeCell.swipeHandler.type = type
+        swipeCell.swipeHandler.config.type = type
         
         switch type {
         case .swipeThrough:
@@ -161,13 +161,13 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     
     func swipeCellWillRelease(_ cell: SwipeCell) {
         print("Swipe Cell Will Release")
-        if cell.swipeHandler.state != .normal && cell.swipeHandler.type != .slidingDoor {
+        if cell.swipeHandler.state != .normal && cell.swipeHandler.config.type != .slidingDoor {
             let indexPath: IndexPath = tableView.indexPath(for: cell)!
             self.removeObjectAtIndexPath(indexPath)
         }
     }
     
-    func swipeCellActivatedAction(_ cell: SwipeCell, isActionLeft: Bool) {
+    func swipeRevealCell(_ cell: SwipeCell, activatedAction isActionLeft: Bool) {
         print("Swipe Cell Activated Action")
         let indexPath: IndexPath = tableView.indexPath(for: cell)!
         self.removeObjectAtIndexPath(indexPath)

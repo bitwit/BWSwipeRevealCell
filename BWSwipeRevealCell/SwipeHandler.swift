@@ -10,20 +10,6 @@ import UIKit
     @objc optional func swipeHandlerDidChangeState(_ handler: SwipeHandler)
 }
 
-//Defines the interaction type of the table cell
-public enum InteractionType: Int {
-    case swipeThrough = 0 // swipes with finger and animates through
-    case springRelease // resists pulling and bounces back
-    case slidingDoor // swipe to a stopping position where underlying buttons can be revealed
-}
-
-public enum SwipeDirection {
-    case none
-    case both
-    case right
-    case left
-}
-
 public enum State {
     case normal
     case pastThresholdLeft
@@ -35,11 +21,7 @@ public class SwipeHandler: NSObject {
     public let backgroundView: UIView
     public let contentView: UIView
     
-    // The interaction type for this table cell
-    public var type: InteractionType = .springRelease
-    
-    // The allowable swipe direction(s)
-    public var revealDirection: SwipeDirection = .both
+    public var config: SwipeHandlerConfiguration
     
     // The current state of the cell (either normal or past a threshold)
     public private(set) var state: State = .normal
@@ -56,15 +38,6 @@ public class SwipeHandler: NSObject {
             return (progress > 1) ? 1 : progress
         }
     }
-    
-    // Should we allow the cell to be pulled past the threshold at all? (.SwipeThrough cells will ignore this)
-    public var shouldExceedThreshold: Bool = true
-    
-    // Control how much elastic resistance there is past threshold, if it can be exceeded. Default is `0.7` and `1.0` would mean no elastic resistance
-    public var panElasticityFactor: CGFloat = 0.7
-    
-    // Length of the animation on release
-    public var animationDuration: Double = 0.2
     
     // BWSwipeCell Delegate
     public weak var delegate: SwipeHandlerDelegate?
@@ -83,11 +56,12 @@ public class SwipeHandler: NSObject {
     
     //MARK: Initialization
     
-    public init(contentView:UIView, backgroundView:UIView) {
+    public init(configuration:SwipeHandlerConfiguration, contentView:UIView, backgroundView:UIView) {
         //TODO: self.selectionStyle = .None
         
         self.contentView = contentView
         self.backgroundView = backgroundView
+        self.config = configuration
         
         super.init()
         
@@ -107,10 +81,10 @@ public class SwipeHandler: NSObject {
         var panOffset: CGFloat = translation.x
         
         // If we have elasticity to consider, do some extra calculations for panOffset
-        if self.type != .swipeThrough && abs(translation.x) > self.threshold {
-            if self.shouldExceedThreshold {
+        if config.type != .swipeThrough && abs(translation.x) > self.threshold {
+            if config.shouldExceedThreshold {
                 let offset: CGFloat = abs(translation.x)
-                panOffset = offset - ((offset - self.threshold) * self.panElasticityFactor)
+                panOffset = offset - ((offset - self.threshold) * config.panElasticityFactor)
                 panOffset *= translation.x < 0 ? -1.0 : 1.0
             } else {
                 // If we don't allow exceeding the threshold
@@ -141,7 +115,7 @@ public class SwipeHandler: NSObject {
     }
     
     public func animateContentViewForPoint(_ point: CGPoint) {
-        if (point.x > 0 && self.revealDirection == .left) || (point.x < 0 && self.revealDirection == .right) || self.revealDirection == .both {
+        if (point.x > 0 && config.revealDirection == .left) || (point.x < 0 && config.revealDirection == .right) || config.revealDirection == .both {
             self.contentView.frame = self.contentView.bounds.offsetBy(dx: point.x, dy: 0)
             let previousState = state
             if point.x >= self.threshold {
@@ -160,7 +134,7 @@ public class SwipeHandler: NSObject {
             delegate?.swipeHandlerDidSwipe?(self)
         }
         else {
-            if (point.x > 0 && self.revealDirection == .right) || (point.x < 0 && self.revealDirection == .left) {
+            if (point.x > 0 && config.revealDirection == .right) || (point.x < 0 && config.revealDirection == .left) {
                 self.contentView.frame = self.contentView.bounds.offsetBy(dx: 0, dy: 0)
             }
         }
@@ -170,9 +144,9 @@ public class SwipeHandler: NSObject {
         
         delegate?.swipeHandlerWillRelease?(self)
         
-        if self.type == .springRelease || self.state == .normal {
+        if config.type == .springRelease || self.state == .normal {
             self.animateCellSpringRelease()
-        } else if self.type == .slidingDoor {
+        } else if config.type == .slidingDoor {
             self.animateCellSlidingDoor()
         } else {
             self.animateCellSwipeThrough()
@@ -182,7 +156,7 @@ public class SwipeHandler: NSObject {
     // MARK: - Reset animations
     
     public func animateCellSpringRelease() {
-        UIView.animate(withDuration: self.animationDuration,
+        UIView.animate(withDuration: config.animationDuration,
                                    delay: 0,
                                    options: .curveEaseOut,
                                    animations: {
@@ -192,7 +166,7 @@ public class SwipeHandler: NSObject {
     }
     
     public func animateCellSlidingDoor() {
-        UIView.animate(withDuration: self.animationDuration,
+        UIView.animate(withDuration: config.animationDuration,
                                    delay: 0,
                                    options: .allowUserInteraction,
                                    animations: {
@@ -207,7 +181,7 @@ public class SwipeHandler: NSObject {
     }
     
     public func animateCellSwipeThrough() {
-        UIView.animate(withDuration: self.animationDuration,
+        UIView.animate(withDuration: config.animationDuration,
                                    delay: 0,
                                    options: UIViewAnimationOptions.curveLinear,
                                    animations: {
@@ -221,7 +195,7 @@ public class SwipeHandler: NSObject {
 extension SwipeHandler: UIGestureRecognizerDelegate {
     
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        if gestureRecognizer is UIPanGestureRecognizer && self.revealDirection != .none {
+        if gestureRecognizer is UIPanGestureRecognizer && config.revealDirection != .none {
             let pan:UIPanGestureRecognizer = gestureRecognizer as! UIPanGestureRecognizer
             let translation: CGPoint = pan.translation(in: contentView.superview)
             return (fabs(translation.x) / fabs(translation.y) > 1) ? true : false

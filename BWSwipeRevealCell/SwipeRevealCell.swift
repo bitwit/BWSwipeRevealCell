@@ -101,9 +101,9 @@ public class SwipeRevealCell: SwipeCell {
         
         super.swipeHandlerWillRelease(handler)
         
-        if handler.type == .springRelease || handler.state == .normal {
+        if handler.config.type == .springRelease || handler.state == .normal {
             self.animateCellSpringRelease()
-        } else if handler.type == .slidingDoor {
+        } else if handler.config.type == .slidingDoor {
             self.animateCellSlidingDoor()
         } else {
             self.animateCellSwipeThrough()
@@ -155,8 +155,10 @@ public class SwipeRevealCell: SwipeCell {
     
     public func animateCellSpringRelease() {
         
+        swipeHandler.animateCellSpringRelease()
+        
         let pointX = self.contentView.frame.origin.x
-        UIView.animate(withDuration: swipeHandler.animationDuration,
+        UIView.animate(withDuration: swipeHandler.config.animationDuration,
             delay: 0,
             options: .curveLinear,
             animations: {
@@ -170,8 +172,10 @@ public class SwipeRevealCell: SwipeCell {
     
     public func animateCellSwipeThrough() {
         
+        swipeHandler.animateCellSwipeThrough()
+        
         let pointX = self.contentView.frame.origin.x
-        UIView.animate(withDuration: swipeHandler.animationDuration,
+        UIView.animate(withDuration: swipeHandler.config.animationDuration,
             delay: 0,
             options: .curveLinear,
             animations: {
@@ -193,14 +197,14 @@ public class SwipeRevealCell: SwipeCell {
     public func getBackgroundViewImagesMaxX(_ x:CGFloat) -> CGFloat {
         if x > 0 {
             let frame = self.leftBackButton!.frame
-            if swipeHandler.type == .swipeThrough {
+            if swipeHandler.config.type == .swipeThrough {
                 return self.contentView.frame.origin.x - frame.width
             } else {
                 return min(self.contentView.frame.minX - frame.width, 0)
             }
         } else {
             let frame = self.rightBackButton!.frame
-            if swipeHandler.type == .swipeThrough {
+            if swipeHandler.config.type == .swipeThrough {
                 return self.contentView.frame.maxX
             } else {
                 return max(self.frame.maxX - frame.width, self.contentView.frame.maxX)
@@ -211,6 +215,7 @@ public class SwipeRevealCell: SwipeCell {
     public func leftButtonTapped () {
         self.shouldCleanUpBackView = true
         self.animateCellSpringRelease()
+        
         let delegate = self.delegate as? SwipeRevealCellDelegate
         
         delegate?.swipeRevealCell?(self, activatedAction: true)
