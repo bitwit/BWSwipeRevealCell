@@ -1,6 +1,6 @@
 //
-//  BWSwipeRevealCell.swift
-//  BWSwipeCell
+//  SwipeRevealCell.swift
+//  SwipeCell
 //
 //  Created by Kyle Newsome on 2015-11-10.
 //  Copyright © 2015 Kyle Newsome. All rights reserved.
@@ -9,11 +9,11 @@
 import Foundation
 import UIKit
 
-@objc public protocol BWSwipeRevealCellDelegate:BWSwipeCellDelegate {
-    @objc optional func swipeCellActivatedAction(_ cell: BWSwipeCell, isActionLeft: Bool)
+@objc public protocol SwipeRevealCellDelegate:SwipeCellDelegate {
+    @objc optional func swipeCellActivatedAction(_ cell: SwipeCell, isActionLeft: Bool)
 }
 
-public class BWSwipeRevealCell: BWSwipeCell {
+public class SwipeRevealCell: SwipeCell {
     
     public var backViewbackgroundColor: UIColor = UIColor(white: 0.92, alpha: 1)
     private var _backView: UIView?
@@ -38,7 +38,7 @@ public class BWSwipeRevealCell: BWSwipeCell {
         if _leftBackButton == nil {
             _leftBackButton = UIButton(frame: CGRect(x: 0, y: 0, width: self.frame.height, height: self.frame.height))
             _leftBackButton!.setImage(self.bgViewLeftImage, for: UIControlState())
-            _leftBackButton!.addTarget(self, action: #selector(BWSwipeRevealCell.leftButtonTapped), for: .touchUpInside)
+            _leftBackButton!.addTarget(self, action: #selector(SwipeRevealCell.leftButtonTapped), for: .touchUpInside)
             _leftBackButton!.tintColor = UIColor.white()
             _leftBackButton!.contentMode = .center
             self.backView!.addSubview(_leftBackButton!)
@@ -51,7 +51,7 @@ public class BWSwipeRevealCell: BWSwipeCell {
         if _rightBackButton == nil {
             _rightBackButton = UIButton(frame: CGRect(x: self.contentView.frame.maxX, y: 0, width: self.frame.height, height: self.frame.height))
             _rightBackButton!.setImage(self.bgViewRightImage, for: UIControlState())
-            _rightBackButton!.addTarget(self, action: #selector(BWSwipeRevealCell.rightButtonTapped), for: .touchUpInside)
+            _rightBackButton!.addTarget(self, action: #selector(SwipeRevealCell.rightButtonTapped), for: .touchUpInside)
             _rightBackButton!.tintColor = UIColor.white()
             _rightBackButton!.contentMode = .center
             self.backView!.addSubview(_rightBackButton!)
@@ -91,13 +91,13 @@ public class BWSwipeRevealCell: BWSwipeCell {
         super.layoutSubviews()
     }
     
-    override public func swipeViewDidStartSwiping(_ handler: BWSwipeViewHandler) {
+    override public func swipeViewDidStartSwiping(_ handler: SwipeViewHandler) {
         
         super.swipeViewDidStartSwiping(handler)
         self.backgroundView!.addSubview(self.backView!)
     }
     
-    override public func swipeViewWillRelease(_ handler: BWSwipeViewHandler) {
+    override public func swipeViewWillRelease(_ handler: SwipeViewHandler) {
         
         super.swipeViewWillRelease(handler)
         
@@ -110,7 +110,7 @@ public class BWSwipeRevealCell: BWSwipeCell {
         }
     }
     
-    override public func swipeViewDidSwipe(_ handler: BWSwipeViewHandler) {
+    override public func swipeViewDidSwipe(_ handler: SwipeViewHandler) {
         
         super.swipeViewDidSwipe(handler)
         //TODO: integrate with content animation
@@ -211,15 +211,14 @@ public class BWSwipeRevealCell: BWSwipeCell {
     public func leftButtonTapped () {
         self.shouldCleanUpBackView = true
         self.animateCellSpringRelease()
-        let delegate = self.delegate as? BWSwipeRevealCellDelegate
+        let delegate = self.delegate as? SwipeRevealCellDelegate
         delegate?.swipeCellActivatedAction?(self, isActionLeft: true)
     }
     
     public func rightButtonTapped () {
         self.shouldCleanUpBackView = true
         self.animateCellSpringRelease()
-        let delegate = self.delegate as? BWSwipeRevealCellDelegate
+        let delegate = self.delegate as? SwipeRevealCellDelegate
         delegate?.swipeCellActivatedAction?(self, isActionLeft: false)
     }
-    
 }

@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 import BWSwipeRevealCell
 
-class MasterViewController: UITableViewController, NSFetchedResultsControllerDelegate, BWSwipeRevealCellDelegate {
+class MasterViewController: UITableViewController, NSFetchedResultsControllerDelegate, SwipeRevealCellDelegate {
     
     var managedObjectContext: NSManagedObjectContext? = nil
     
@@ -71,7 +71,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     
     func configureCell(_ cell: UITableViewCell, atIndexPath indexPath: IndexPath) {
         let object = self.fetchedResultsController.object(at: indexPath)
-        let swipeCell:BWSwipeRevealCell = cell as! BWSwipeRevealCell
+        let swipeCell:SwipeRevealCell = cell as! SwipeRevealCell
         
         swipeCell.bgViewLeftImage = UIImage(named:"Done")!.withRenderingMode(.alwaysTemplate)
         swipeCell.bgViewLeftColor = UIColor.green()
@@ -79,7 +79,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         swipeCell.bgViewRightImage = UIImage(named:"Delete")!.withRenderingMode(.alwaysTemplate)
         swipeCell.bgViewRightColor = UIColor.red()
         
-        let type = BWSwipeCellType(rawValue: object.value(forKey: "type") as! Int)!
+        let type = InteractionType(rawValue: object.value(forKey: "type") as! Int)!
         swipeCell.swipeHandler.type = type
         
         switch type {
@@ -159,7 +159,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     
     // MARK: - Reveal Cell Delegate
     
-    func swipeCellWillRelease(_ cell: BWSwipeCell) {
+    func swipeCellWillRelease(_ cell: SwipeCell) {
         print("Swipe Cell Will Release")
         if cell.swipeHandler.state != .normal && cell.swipeHandler.type != .slidingDoor {
             let indexPath: IndexPath = tableView.indexPath(for: cell)!
@@ -167,13 +167,13 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         }
     }
     
-    func swipeCellActivatedAction(_ cell: BWSwipeCell, isActionLeft: Bool) {
+    func swipeCellActivatedAction(_ cell: SwipeCell, isActionLeft: Bool) {
         print("Swipe Cell Activated Action")
         let indexPath: IndexPath = tableView.indexPath(for: cell)!
         self.removeObjectAtIndexPath(indexPath)
     }
     
-    func swipeCellDidChangeState(_ cell: BWSwipeCell) {
+    func swipeCellDidChangeState(_ cell: SwipeCell) {
         print("Swipe Cell Did Change State")
         if cell.swipeHandler.state != .normal {
             print("-> Cell Passed Threshold")
@@ -182,15 +182,15 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         }
     }
     
-    func swipeCellDidCompleteRelease(_ cell: BWSwipeCell) {
+    func swipeCellDidCompleteRelease(_ cell: SwipeCell) {
         print("Swipe Cell Did Complete Release")
     }
     
-    func swipeCellDidSwipe(_ cell: BWSwipeCell) {
+    func swipeCellDidSwipe(_ cell: SwipeCell) {
         print("Swipe Cell Did Swipe")
     }
     
-    func swipeCellDidStartSwiping(_ cell: BWSwipeCell) {
+    func swipeCellDidStartSwiping(_ cell: SwipeCell) {
         print("Swipe Cell Did Start Swiping")
     }
     
