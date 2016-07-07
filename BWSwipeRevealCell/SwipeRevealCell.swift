@@ -101,13 +101,7 @@ public class SwipeRevealCell: SwipeCell {
         
         super.swipeHandlerWillRelease(handler)
         
-        if handler.config.type == .springRelease || handler.state == .normal {
-            self.animateCellSpringRelease()
-        } else if handler.config.type == .slidingDoor {
-            self.animateCellSlidingDoor()
-        } else {
-            self.animateCellSwipeThrough()
-        }
+        self.animateRelease()
     }
     
     override public func swipeHandlerDidSwipe(_ handler: SwipeHandler) {
@@ -153,12 +147,16 @@ public class SwipeRevealCell: SwipeCell {
     
     // MARK: - Reveal Cell Animations
     
-    public func animateCellSpringRelease() {
-        
-        swipeHandler.animateCellSpringRelease()
+    public func animateRelease() {
+
+        guard swipeHandler.state == .normal else {
+            
+            return
+        }
         
         let pointX = self.contentView.frame.origin.x
-        UIView.animate(withDuration: swipeHandler.config.animationDuration,
+        
+        UIView.animate(withDuration: 0.2,
             delay: 0,
             options: .curveLinear,
             animations: {
@@ -170,51 +168,24 @@ public class SwipeRevealCell: SwipeCell {
             }, completion: nil)
     }
     
-    public func animateCellSwipeThrough() {
-        
-        swipeHandler.animateCellSwipeThrough()
-        
-        let pointX = self.contentView.frame.origin.x
-        UIView.animate(withDuration: swipeHandler.config.animationDuration,
-            delay: 0,
-            options: .curveLinear,
-            animations: {
-                if pointX > 0 {
-                    self.leftBackButton!.frame.origin.x = self.frame.maxX
-                } else if pointX < 0 {
-                    self.rightBackButton!.frame.origin.x = -self.swipeHandler.threshold
-                }
-            }, completion: nil)
-    }
-    
-    public func animateCellSlidingDoor() {
-        self.shouldCleanUpBackView = false
-    }
-    
-    
     // MARK: - Reveal Cell
     
     public func getBackgroundViewImagesMaxX(_ x:CGFloat) -> CGFloat {
         if x > 0 {
+            
             let frame = self.leftBackButton!.frame
-            if swipeHandler.config.type == .swipeThrough {
-                return self.contentView.frame.origin.x - frame.width
-            } else {
-                return min(self.contentView.frame.minX - frame.width, 0)
-            }
+            return min(self.contentView.frame.minX - frame.width, 0)
         } else {
+            
             let frame = self.rightBackButton!.frame
-            if swipeHandler.config.type == .swipeThrough {
-                return self.contentView.frame.maxX
-            } else {
-                return max(self.frame.maxX - frame.width, self.contentView.frame.maxX)
-            }
+            return max(self.frame.maxX - frame.width, self.contentView.frame.maxX)
         }
     }
     
     public func leftButtonTapped () {
         self.shouldCleanUpBackView = true
-        self.animateCellSpringRelease()
+        swipeHandler.resetCellPosition(withForce: true)
+        self.animateRelease()
         
         let delegate = self.delegate as? SwipeRevealCellDelegate
         
@@ -223,7 +194,9 @@ public class SwipeRevealCell: SwipeCell {
     
     public func rightButtonTapped () {
         self.shouldCleanUpBackView = true
-        self.animateCellSpringRelease()
+        swipeHandler.resetCellPosition(withForce: true)
+        self.animateRelease()
+        
         let delegate = self.delegate as? SwipeRevealCellDelegate
         
         delegate?.swipeRevealCell?(self, activatedAction: false)

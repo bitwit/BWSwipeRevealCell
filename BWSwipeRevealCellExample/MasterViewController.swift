@@ -79,21 +79,25 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         swipeCell.bgViewRightImage = UIImage(named:"Delete")!.withRenderingMode(.alwaysTemplate)
         swipeCell.bgViewRightColor = UIColor.red()
         
-        let type = InteractionType(rawValue: object.value(forKey: "type") as! Int)!
-        swipeCell.swipeHandler.config.type = type
+        let type = object.value(forKey: "type") as! Int
         
+        let swipeConfig: SwipeHandlerConfiguration
         switch type {
-        case .swipeThrough:
-            swipeCell.textLabel!.text = "Swipe Through"
-            break
-        case .springRelease:
-            swipeCell.textLabel!.text = "Spring Release"
-            break
-        case .slidingDoor:
-            swipeCell.textLabel!.text = "Sliding Door"
-            break
+        case 0:
+            swipeCell.textLabel?.text = "Swipe Through"
+            swipeConfig = .swipeThrough()
+        case 1:
+            swipeCell.textLabel?.text = "Spring Release"
+            swipeConfig = .springRelease()
+        case 2:
+            swipeCell.textLabel?.text = "Sliding Door"
+            swipeConfig = .slidingDoor()
+        default:
+            return
+            
         }
         
+        swipeCell.swipeHandler.config = swipeConfig
         swipeCell.delegate = self
     }
     
@@ -161,7 +165,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     
     func swipeCellWillRelease(_ cell: SwipeCell) {
         print("Swipe Cell Will Release")
-        if cell.swipeHandler.state != .normal && cell.swipeHandler.config.type != .slidingDoor {
+        if cell.swipeHandler.state != .normal && cell.swipeHandler.config.name != "SlidingDoor" {
             let indexPath: IndexPath = tableView.indexPath(for: cell)!
             self.removeObjectAtIndexPath(indexPath)
         }

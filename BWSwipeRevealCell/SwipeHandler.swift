@@ -21,7 +21,7 @@ public class SwipeHandler: NSObject {
     public let backgroundView: UIView
     public let contentView: UIView
     
-    public var config: SwipeHandlerConfiguration
+    public var config: SwipeHandlerConfiguration = .springRelease()
     
     // The current state of the cell (either normal or past a threshold)
     public private(set) var state: State = .normal
@@ -42,26 +42,13 @@ public class SwipeHandler: NSObject {
     // BWSwipeCell Delegate
     public weak var delegate: SwipeHandlerDelegate?
     
-    public lazy var releaseCompletionBlock:((Bool) -> Void)? = {
-        return {
-            [weak self] (finished: Bool) in
-            
-            guard let this = self else { return }
-            
-            this.delegate?.swipeHandlerDidCompleteRelease?(this)
-            this.cleanUp()
-        }
-    }()
-    
-    
     //MARK: Initialization
     
-    public init(configuration:SwipeHandlerConfiguration, contentView:UIView, backgroundView:UIView) {
+    public init(contentView:UIView, backgroundView:UIView) {
         //TODO: self.selectionStyle = .None
         
         self.contentView = contentView
         self.backgroundView = backgroundView
-        self.config = configuration
         
         super.init()
         
@@ -81,7 +68,10 @@ public class SwipeHandler: NSObject {
         var panOffset: CGFloat = translation.x
         
         // If we have elasticity to consider, do some extra calculations for panOffset
-        if config.type != .swipeThrough && abs(translation.x) > self.threshold {
+        if abs(translation.x) > self.threshold {
+            
+            
+            
             if config.shouldExceedThreshold {
                 let offset: CGFloat = abs(translation.x)
                 panOffset = offset - ((offset - self.threshold) * config.panElasticityFactor)
@@ -105,7 +95,7 @@ public class SwipeHandler: NSObject {
                 self.animateContentViewForPoint(actualTranslation)
             }
             else {
-                self.resetCellPosition()
+                self.resetCellPosition(withForce: false)
             }
         }
     }
@@ -115,7 +105,11 @@ public class SwipeHandler: NSObject {
     }
     
     public func animateContentViewForPoint(_ point: CGPoint) {
-        if (point.x > 0 && config.revealDirection == .left) || (point.x < 0 && config.revealDirection == .right) || config.revealDirection == .both {
+        
+        if config.revealDirection == .both // if both directions are allowed
+            || (point.x > 0 && config.revealDirection == .left) // OR if we are revealing left and it's allowed
+            || (point.x < 0 && config.revealDirection == .right) { // OR "" right and it's allowed
+            
             self.contentView.frame = self.contentView.bounds.offsetBy(dx: point.x, dy: 0)
             let previousState = state
             if point.x >= self.threshold {
@@ -140,54 +134,36 @@ public class SwipeHandler: NSObject {
         }
     }
     
-    public func resetCellPosition() {
+    public func resetCellPosition(withForce forced: Bool) {
         
-        delegate?.swipeHandlerWillRelease?(self)
-        
-        if config.type == .springRelease || self.state == .normal {
-            self.animateCellSpringRelease()
-        } else if config.type == .slidingDoor {
-            self.animateCellSlidingDoor()
+        if forced {
+            state = .normal
         } else {
-            self.animateCellSwipeThrough()
+    
+            delegate?.swipeHandlerWillRelease?(self)
         }
+        
+        animatePositionReset(withForce: forced)
     }
     
-    // MARK: - Reset animations
-    
-    public func animateCellSpringRelease() {
-        UIView.animate(withDuration: config.animationDuration,
-                                   delay: 0,
-                                   options: .curveEaseOut,
-                                   animations: {
-                                    self.contentView.frame = self.contentView.bounds
-            },
-                                   completion: self.releaseCompletionBlock)
-    }
-    
-    public func animateCellSlidingDoor() {
-        UIView.animate(withDuration: config.animationDuration,
-                                   delay: 0,
-                                   options: .allowUserInteraction,
-                                   animations: {
-                                    let pointX = self.contentView.frame.origin.x
-                                    if pointX > 0 {
-                                        self.contentView.frame.origin.x = self.threshold
-                                    } else if pointX < 0 {
-                                        self.contentView.frame.origin.x = -self.threshold
-                                    }
-            },
-                                   completion: self.releaseCompletionBlock)
-    }
-    
-    public func animateCellSwipeThrough() {
-        UIView.animate(withDuration: config.animationDuration,
-                                   delay: 0,
-                                   options: UIViewAnimationOptions.curveLinear,
-                                   animations: {
-                                    let direction:CGFloat = (self.contentView.frame.origin.x > 0) ? 1 : -1
-                                    self.contentView.frame.origin.x = direction * (self.contentView.bounds.width + self.threshold)
-            }, completion: self.releaseCompletionBlock)
+    public func animatePositionReset(withForce forced: Bool) {
+        
+        guard let animation = config.animation else {
+            //TODO: Perform unanimated reset
+            return
+        }
+        
+        animation.resetAnimationBlock(self) {
+            [weak self] _ in
+            
+            guard forced == false,
+                let this = self else {
+                return
+            }
+            
+            this.delegate?.swipeHandlerDidCompleteRelease?(this)
+            this.cleanUp()
+        }
     }
 
 }
@@ -195,6 +171,7 @@ public class SwipeHandler: NSObject {
 extension SwipeHandler: UIGestureRecognizerDelegate {
     
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        
         if gestureRecognizer is UIPanGestureRecognizer && config.revealDirection != .none {
             let pan:UIPanGestureRecognizer = gestureRecognizer as! UIPanGestureRecognizer
             let translation: CGPoint = pan.translation(in: contentView.superview)

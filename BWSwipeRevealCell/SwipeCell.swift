@@ -54,7 +54,7 @@ public class SwipeCell: UITableViewCell {
             backgroundView = bv
         }
         
-        swipeHandler = SwipeHandler(configuration: SwipeHandlerConfiguration(), contentView: contentView, backgroundView: bv)
+        swipeHandler = SwipeHandler(contentView: contentView, backgroundView: bv)
         swipeHandler.delegate = self
     }
 }
