@@ -9,8 +9,8 @@
 /* Begin PBXBuildFile section */
 		752EDC641BF64B5B007ED36D /* BWSwipeRevealCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 752EDC631BF64B5B007ED36D /* BWSwipeRevealCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		752EDC6C1BF65169007ED36D /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 752EDC6B1BF65169007ED36D /* README.md */; };
-		752EDC6F1BF654F8007ED36D /* BWSwipeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752EDC6D1BF654F8007ED36D /* BWSwipeCell.swift */; };
-		752EDC701BF654F8007ED36D /* BWSwipeRevealCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752EDC6E1BF654F8007ED36D /* BWSwipeRevealCell.swift */; };
+		752EDC6F1BF654F8007ED36D /* SwipeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752EDC6D1BF654F8007ED36D /* SwipeCell.swift */; };
+		752EDC701BF654F8007ED36D /* SwipeRevealCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752EDC6E1BF654F8007ED36D /* SwipeRevealCell.swift */; };
 		752EDC781BF65880007ED36D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752EDC771BF65880007ED36D /* AppDelegate.swift */; };
 		752EDC7B1BF65880007ED36D /* BWSwipeRevealCellExample.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 752EDC791BF65880007ED36D /* BWSwipeRevealCellExample.xcdatamodeld */; };
 		752EDC7D1BF65880007ED36D /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752EDC7C1BF65880007ED36D /* MasterViewController.swift */; };
@@ -18,8 +18,11 @@
 		752EDC871BF65880007ED36D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 752EDC851BF65880007ED36D /* LaunchScreen.storyboard */; };
 		752EDC8D1BF659C7007ED36D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 752EDC8C1BF659C7007ED36D /* Assets.xcassets */; };
 		752EDC8F1BF65C68007ED36D /* example.gif in Resources */ = {isa = PBXBuildFile; fileRef = 752EDC8E1BF65C68007ED36D /* example.gif */; };
+		7563A67C1D09C82400A53142 /* SwipeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7563A67B1D09C82400A53142 /* SwipeHandler.swift */; };
 		75ABE4201C0F88AD00F42894 /* BWSwipeRevealCell.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 752EDC601BF64B5B007ED36D /* BWSwipeRevealCell.framework */; };
 		75ABE4221C0F8AF300F42894 /* BWSwipeRevealCell.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 752EDC601BF64B5B007ED36D /* BWSwipeRevealCell.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		75C5BCF01D2B5E1F00F6E0C6 /* SwipeHandlerConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C5BCEF1D2B5E1F00F6E0C6 /* SwipeHandlerConfiguration.swift */; };
+		75C5BCF21D2B638B00F6E0C6 /* SwipeHandlerAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C5BCF11D2B638B00F6E0C6 /* SwipeHandlerAnimation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,8 +54,8 @@
 		752EDC631BF64B5B007ED36D /* BWSwipeRevealCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BWSwipeRevealCell.h; sourceTree = "<group>"; };
 		752EDC651BF64B5B007ED36D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		752EDC6B1BF65169007ED36D /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		752EDC6D1BF654F8007ED36D /* BWSwipeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BWSwipeCell.swift; sourceTree = "<group>"; };
-		752EDC6E1BF654F8007ED36D /* BWSwipeRevealCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BWSwipeRevealCell.swift; sourceTree = "<group>"; };
+		752EDC6D1BF654F8007ED36D /* SwipeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeCell.swift; sourceTree = "<group>"; };
+		752EDC6E1BF654F8007ED36D /* SwipeRevealCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeRevealCell.swift; sourceTree = "<group>"; };
 		752EDC751BF65880007ED36D /* BWSwipeRevealCellExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BWSwipeRevealCellExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		752EDC771BF65880007ED36D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		752EDC7A1BF65880007ED36D /* BWSwipeRevealCellExample.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = BWSwipeRevealCellExample.xcdatamodel; sourceTree = "<group>"; };
@@ -62,6 +65,9 @@
 		752EDC881BF65880007ED36D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		752EDC8C1BF659C7007ED36D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		752EDC8E1BF65C68007ED36D /* example.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = example.gif; sourceTree = "<group>"; };
+		7563A67B1D09C82400A53142 /* SwipeHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeHandler.swift; sourceTree = "<group>"; };
+		75C5BCEF1D2B5E1F00F6E0C6 /* SwipeHandlerConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeHandlerConfiguration.swift; sourceTree = "<group>"; };
+		75C5BCF11D2B638B00F6E0C6 /* SwipeHandlerAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeHandlerAnimation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,8 +112,8 @@
 		752EDC621BF64B5B007ED36D /* BWSwipeRevealCell */ = {
 			isa = PBXGroup;
 			children = (
-				752EDC6D1BF654F8007ED36D /* BWSwipeCell.swift */,
-				752EDC6E1BF654F8007ED36D /* BWSwipeRevealCell.swift */,
+				75C5BCF31D2B639100F6E0C6 /* Swipe Handler */,
+				75C5BCF41D2B639F00F6E0C6 /* Swipe TableView Cells */,
 				752EDC631BF64B5B007ED36D /* BWSwipeRevealCell.h */,
 				752EDC651BF64B5B007ED36D /* Info.plist */,
 			);
@@ -126,6 +132,25 @@
 				752EDC791BF65880007ED36D /* BWSwipeRevealCellExample.xcdatamodeld */,
 			);
 			path = BWSwipeRevealCellExample;
+			sourceTree = "<group>";
+		};
+		75C5BCF31D2B639100F6E0C6 /* Swipe Handler */ = {
+			isa = PBXGroup;
+			children = (
+				75C5BCF11D2B638B00F6E0C6 /* SwipeHandlerAnimation.swift */,
+				75C5BCEF1D2B5E1F00F6E0C6 /* SwipeHandlerConfiguration.swift */,
+				7563A67B1D09C82400A53142 /* SwipeHandler.swift */,
+			);
+			name = "Swipe Handler";
+			sourceTree = "<group>";
+		};
+		75C5BCF41D2B639F00F6E0C6 /* Swipe TableView Cells */ = {
+			isa = PBXGroup;
+			children = (
+				752EDC6D1BF654F8007ED36D /* SwipeCell.swift */,
+				752EDC6E1BF654F8007ED36D /* SwipeRevealCell.swift */,
+			);
+			name = "Swipe TableView Cells";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -191,9 +216,11 @@
 				TargetAttributes = {
 					752EDC5F1BF64B5B007ED36D = {
 						CreatedOnToolsVersion = 7.1;
+						LastSwiftMigration = 0800;
 					};
 					752EDC741BF65880007ED36D = {
 						CreatedOnToolsVersion = 7.1;
+						LastSwiftMigration = 0800;
 					};
 				};
 			};
@@ -243,8 +270,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				752EDC6C1BF65169007ED36D /* README.md in Sources */,
-				752EDC701BF654F8007ED36D /* BWSwipeRevealCell.swift in Sources */,
-				752EDC6F1BF654F8007ED36D /* BWSwipeCell.swift in Sources */,
+				7563A67C1D09C82400A53142 /* SwipeHandler.swift in Sources */,
+				75C5BCF21D2B638B00F6E0C6 /* SwipeHandlerAnimation.swift in Sources */,
+				75C5BCF01D2B5E1F00F6E0C6 /* SwipeHandlerConfiguration.swift in Sources */,
+				752EDC701BF654F8007ED36D /* SwipeRevealCell.swift in Sources */,
+				752EDC6F1BF654F8007ED36D /* SwipeCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -390,6 +420,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = ca.bitwit.BWSwipeRevealCell;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -406,6 +437,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = ca.bitwit.BWSwipeRevealCell;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -418,6 +450,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ca.bitwit.BWSwipeRevealCellExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -430,6 +463,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ca.bitwit.BWSwipeRevealCellExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

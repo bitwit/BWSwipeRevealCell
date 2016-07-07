@@ -10,23 +10,23 @@ import UIKit
 import CoreData
 import BWSwipeRevealCell
 
-class MasterViewController: UITableViewController, NSFetchedResultsControllerDelegate, BWSwipeRevealCellDelegate {
+class MasterViewController: UITableViewController, NSFetchedResultsControllerDelegate, SwipeRevealCellDelegate {
     
     var managedObjectContext: NSManagedObjectContext? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let addButton = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "insertNewObject:")
+        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(insertNewObject(_:)))
         self.navigationItem.rightBarButtonItem = addButton
     }
     
-    func insertNewObject(sender: AnyObject) {
+    func insertNewObject(_ sender: AnyObject) {
         let context = self.fetchedResultsController.managedObjectContext
         let entity = self.fetchedResultsController.fetchRequest.entity!
         
         //Create one of each type
         for i in 0..<3 {
-            let newManagedObject = NSEntityDescription.insertNewObjectForEntityForName(entity.name!, inManagedObjectContext: context)
+            let newManagedObject = NSEntityDescription.insertNewObject(forEntityName: entity.name!, into: context)
             newManagedObject.setValue(i, forKey: "type")
         }
         
@@ -37,10 +37,10 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         }
     }
     
-    func removeObjectAtIndexPath(indexPath:NSIndexPath) {
+    func removeObjectAtIndexPath(_ indexPath:IndexPath) {
         let context = self.fetchedResultsController.managedObjectContext
         //Deleting objects regardless of done/delete for the purpose of this example
-        context.deleteObject(self.fetchedResultsController.objectAtIndexPath(indexPath) as! NSManagedObject)
+        context.delete(self.fetchedResultsController.object(at: indexPath) as! NSManagedObject)
         do {
             try context.save()
         } catch {
@@ -50,65 +50,69 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     
     // MARK: - Table View
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 72
     }
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return self.fetchedResultsController.sections?.count ?? 0
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let sectionInfo = self.fetchedResultsController.sections![section]
         return sectionInfo.numberOfObjects
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         self.configureCell(cell, atIndexPath: indexPath)
         return cell
     }
     
-    func configureCell(cell: UITableViewCell, atIndexPath indexPath: NSIndexPath) {
-        let object = self.fetchedResultsController.objectAtIndexPath(indexPath)
-        let swipeCell:BWSwipeRevealCell = cell as! BWSwipeRevealCell
+    func configureCell(_ cell: UITableViewCell, atIndexPath indexPath: IndexPath) {
+        let object = self.fetchedResultsController.object(at: indexPath)
+        let swipeCell:SwipeRevealCell = cell as! SwipeRevealCell
         
-        swipeCell.bgViewLeftImage = UIImage(named:"Done")!.imageWithRenderingMode(.AlwaysTemplate)
-        swipeCell.bgViewLeftColor = UIColor.greenColor()
+        swipeCell.bgViewLeftImage = UIImage(named:"Done")!.withRenderingMode(.alwaysTemplate)
+        swipeCell.bgViewLeftColor = UIColor.green()
         
-        swipeCell.bgViewRightImage = UIImage(named:"Delete")!.imageWithRenderingMode(.AlwaysTemplate)
-        swipeCell.bgViewRightColor = UIColor.redColor()
+        swipeCell.bgViewRightImage = UIImage(named:"Delete")!.withRenderingMode(.alwaysTemplate)
+        swipeCell.bgViewRightColor = UIColor.red()
         
-        let type = BWSwipeCellType(rawValue: object.valueForKey("type") as! Int)!
-        swipeCell.type = type
+        let type = object.value(forKey: "type") as! Int
         
+        let swipeConfig: SwipeHandlerConfiguration
         switch type {
-        case .SwipeThrough:
-            swipeCell.textLabel!.text = "Swipe Through"
-            break
-        case .SpringRelease:
-            swipeCell.textLabel!.text = "Spring Release"
-            break
-        case .SlidingDoor:
-            swipeCell.textLabel!.text = "Sliding Door"
-            break
+        case 0:
+            swipeCell.textLabel?.text = "Swipe Through"
+            swipeConfig = .swipeThrough()
+        case 1:
+            swipeCell.textLabel?.text = "Spring Release"
+            swipeConfig = .springRelease()
+        case 2:
+            swipeCell.textLabel?.text = "Sliding Door"
+            swipeConfig = .slidingDoor()
+        default:
+            return
+            
         }
         
+        swipeCell.swipeHandler.config = swipeConfig
         swipeCell.delegate = self
     }
     
     // MARK: - Fetched results controller
     
-    var fetchedResultsController: NSFetchedResultsController {
+    var fetchedResultsController: NSFetchedResultsController<NSManagedObject> {
         if _fetchedResultsController != nil {
             return _fetchedResultsController!
         }
         
-        let fetchRequest = NSFetchRequest()
-        let entity = NSEntityDescription.entityForName("Event", inManagedObjectContext: self.managedObjectContext!)
+        let fetchRequest:NSFetchRequest<NSManagedObject> = NSFetchRequest()
+        let entity = NSEntityDescription.entity(forEntityName: "Event", in: self.managedObjectContext!)
         fetchRequest.entity = entity
         fetchRequest.fetchBatchSize = 20
-        let sortDescriptor = NSSortDescriptor(key: "type", ascending: false)
+        let sortDescriptor = SortDescriptor(key: "type", ascending: false)
         fetchRequest.sortDescriptors = [sortDescriptor]
         let aFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.managedObjectContext!, sectionNameKeyPath: nil, cacheName: "Master")
         aFetchedResultsController.delegate = self
@@ -122,75 +126,75 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         
         return _fetchedResultsController!
     }
-    var _fetchedResultsController: NSFetchedResultsController? = nil
+    var _fetchedResultsController: NSFetchedResultsController<NSManagedObject>? = nil
     
-    func controllerWillChangeContent(controller: NSFetchedResultsController) {
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         self.tableView.beginUpdates()
     }
     
-    func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
         switch type {
-        case .Insert:
-            self.tableView.insertSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Fade)
-        case .Delete:
-            self.tableView.deleteSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Fade)
+        case .insert:
+            self.tableView.insertSections(IndexSet(integer: sectionIndex), with: .fade)
+        case .delete:
+            self.tableView.deleteSections(IndexSet(integer: sectionIndex), with: .fade)
         default:
             return
         }
     }
     
-    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: AnyObject, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         switch type {
-        case .Insert:
-            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
-        case .Delete:
-            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
-        case .Update:
-            self.configureCell(tableView.cellForRowAtIndexPath(indexPath!)!, atIndexPath: indexPath!)
-        case .Move:
-            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
-            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
+        case .insert:
+            tableView.insertRows(at: [newIndexPath!], with: .fade)
+        case .delete:
+            tableView.deleteRows(at: [indexPath!], with: .fade)
+        case .update:
+            self.configureCell(tableView.cellForRow(at: indexPath!)!, atIndexPath: indexPath!)
+        case .move:
+            tableView.deleteRows(at: [indexPath!], with: .fade)
+            tableView.insertRows(at: [newIndexPath!], with: .fade)
         }
     }
     
-    func controllerDidChangeContent(controller: NSFetchedResultsController) {
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         self.tableView.endUpdates()
     }
     
     // MARK: - Reveal Cell Delegate
     
-    func swipeCellWillRelease(cell: BWSwipeCell) {
+    func swipeCellWillRelease(_ cell: SwipeCell) {
         print("Swipe Cell Will Release")
-        if cell.state != .Normal && cell.type != .SlidingDoor {
-            let indexPath: NSIndexPath = tableView.indexPathForCell(cell)!
+        if cell.swipeHandler.state != .normal && cell.swipeHandler.config.name != "SlidingDoor" {
+            let indexPath: IndexPath = tableView.indexPath(for: cell)!
             self.removeObjectAtIndexPath(indexPath)
         }
     }
     
-    func swipeCellActivatedAction(cell: BWSwipeCell, isActionLeft: Bool) {
+    func swipeRevealCell(_ cell: SwipeCell, activatedAction isActionLeft: Bool) {
         print("Swipe Cell Activated Action")
-        let indexPath: NSIndexPath = tableView.indexPathForCell(cell)!
+        let indexPath: IndexPath = tableView.indexPath(for: cell)!
         self.removeObjectAtIndexPath(indexPath)
     }
     
-    func swipeCellDidChangeState(cell: BWSwipeCell) {
+    func swipeCellDidChangeState(_ cell: SwipeCell) {
         print("Swipe Cell Did Change State")
-        if cell.state != .Normal {
+        if cell.swipeHandler.state != .normal {
             print("-> Cell Passed Threshold")
         } else {
             print("-> Cell Returned to Normal")
         }
     }
     
-    func swipeCellDidCompleteRelease(cell: BWSwipeCell) {
+    func swipeCellDidCompleteRelease(_ cell: SwipeCell) {
         print("Swipe Cell Did Complete Release")
     }
     
-    func swipeCellDidSwipe(cell: BWSwipeCell) {
+    func swipeCellDidSwipe(_ cell: SwipeCell) {
         print("Swipe Cell Did Swipe")
     }
     
-    func swipeCellDidStartSwiping(cell: BWSwipeCell) {
+    func swipeCellDidStartSwiping(_ cell: SwipeCell) {
         print("Swipe Cell Did Start Swiping")
     }
     
