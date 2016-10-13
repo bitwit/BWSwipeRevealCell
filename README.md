@@ -15,17 +15,21 @@ There are two main classes available - `BWSwipeCell` and `BWSwipeRevealCell`
 ### BWSwipeRevealCell Example
 After setting `BWSwipeRevealCell` as your table cell's type in the storyboard and setting a delegate. Use this code in your controller:
 ```swift
-func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-    let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
-    if let swipeCell = cell as? BWSwipeRevealCell {
-        swipeCell.bgViewLeftImage = UIImage(named:"Done")!.imageWithRenderingMode(.AlwaysTemplate)
-        swipeCell.bgViewLeftColor = UIColor.greenColor()
-        swipeCell.bgViewRightImage = UIImage(named:"Delete")!.imageWithRenderingMode(.AlwaysTemplate)
-        swipeCell.bgViewRightColor = UIColor.redColor()
-        swipeCell.type = .SpringRelease
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! BWSwipeRevealCell
+        
+        swipeCell.bgViewLeftImage = UIImage(named:"Done")!.withRenderingMode(.alwaysTemplate)
+        swipeCell.bgViewLeftColor = UIColor.green
+        
+        swipeCell.bgViewRightImage = UIImage(named:"Delete")!.withRenderingMode(.alwaysTemplate)
+        swipeCell.bgViewRightColor = UIColor.red
+        
+        swipeCell.type = .springRelease
+        
+        swipeCell.delegate = self // Or whatever your delegate might be
+        return cell
     }
-    return cell
-}
 ```
 
 ### Customizing through the interface
@@ -34,15 +38,15 @@ func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexP
 
 **var type:BWSwipeCellType**
 
-Can be `.SpringRelease`, `.SwipeThrough` or `.SlidingDoor`. Defaults to `.SpringRelease`
+Can be `.springRelease`, `.swipeThrough` or `.slidingDoor`. Defaults to `.springRelease`
 
 **var revealDirection: BWSwipeCellRevealDirection**
 
-Can be `.Both`, `.Left` or `.Right`. Defaults to `.Both`
+Can be `.both`, `.left` or `.right`. Defaults to `.both`
 
 **(readonly) var state: BWSwipeCellState**
 
-Can be `.Normal`, `.PastThresholdLeft` or `.PastThresholdRight`
+Can be `.normal`, `.pastThresholdLeft` or `.pastThresholdRight`
 
 **var threshold: CGFloat**
 
@@ -106,12 +110,13 @@ Set the delegate on the cell
 ### Roadmap
 Some brief ideas on ways to improve this library
 
-##### v 1.x.0
-- Fix bugs
-- More code commentary
-- Identify and remove any code redundancy
+#### v 1.x.0 (Swift 2.x version)
+- Complete
 
-##### v 2.0.0
+##### v 2.x.0 (Swift 3.x version)
+- Fix bugs
+
+##### v 3.0.0
 - [See Github Milestone](https://github.com/bitwit/BWSwipeRevealCell/milestones/Version%202.0.0)
 
 ##### v x.0.0 (a.k.a. Ideas. PRs welcome.)
