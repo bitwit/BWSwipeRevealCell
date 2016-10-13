@@ -10,57 +10,57 @@ import Foundation
 import UIKit
 
 @objc public protocol BWSwipeRevealCellDelegate:BWSwipeCellDelegate {
-    optional func swipeCellActivatedAction(cell: BWSwipeCell, isActionLeft: Bool)
+    @objc optional func swipeCellActivatedAction(_ cell: BWSwipeCell, isActionLeft: Bool)
 }
 
-public class BWSwipeRevealCell: BWSwipeCell {
+open class BWSwipeRevealCell: BWSwipeCell {
     
-    public var backViewbackgroundColor: UIColor = UIColor(white: 0.92, alpha: 1)
-    private var _backView: UIView?
-    public var backView: UIView? {
+    open var backViewbackgroundColor: UIColor = UIColor(white: 0.92, alpha: 1)
+    fileprivate var _backView: UIView?
+    open var backView: UIView? {
         if _backView == nil {
             _backView = UIView(frame: self.contentView.bounds)
             _backView!.backgroundColor = self.backViewbackgroundColor
         }
         return _backView
     }
-    public var shouldCleanUpBackView = true
+    open var shouldCleanUpBackView = true
     
-    public var bgViewInactiveColor: UIColor = UIColor.grayColor()
-    public var bgViewLeftColor: UIColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 1)
-    public var bgViewRightColor: UIColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 1)
+    open var bgViewInactiveColor: UIColor = UIColor.gray
+    open var bgViewLeftColor: UIColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 1)
+    open var bgViewRightColor: UIColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 1)
     
-    public var bgViewLeftImage: UIImage?
-    public var bgViewRightImage: UIImage?
+    open var bgViewLeftImage: UIImage?
+    open var bgViewRightImage: UIImage?
     
-    private var _leftBackButton: UIButton?
-    public var leftBackButton:UIButton? {
+    fileprivate var _leftBackButton: UIButton?
+    open var leftBackButton:UIButton? {
         if _leftBackButton == nil {
-            _leftBackButton = UIButton(frame: CGRectMake(0, 0, CGRectGetHeight(self.frame), CGRectGetHeight(self.frame)))
-            _leftBackButton!.setImage(self.bgViewLeftImage, forState: .Normal)
-            _leftBackButton!.addTarget(self, action: #selector(BWSwipeRevealCell.leftButtonTapped), forControlEvents: .TouchUpInside)
-            _leftBackButton!.tintColor = UIColor.whiteColor()
-            _leftBackButton!.contentMode = .Center
+            _leftBackButton = UIButton(frame: CGRect(x: 0, y: 0, width: self.frame.height, height: self.frame.height))
+            _leftBackButton!.setImage(self.bgViewLeftImage, for: .normal)
+            _leftBackButton!.addTarget(self, action: #selector(BWSwipeRevealCell.leftButtonTapped), for: .touchUpInside)
+            _leftBackButton!.tintColor = UIColor.white
+            _leftBackButton!.contentMode = .center
             self.backView!.addSubview(_leftBackButton!)
         }
         return _leftBackButton
     }
     
-    private var _rightBackButton: UIButton?
-    public var rightBackButton:UIButton? {
+    fileprivate var _rightBackButton: UIButton?
+    open var rightBackButton:UIButton? {
         if _rightBackButton == nil {
-            _rightBackButton = UIButton(frame: CGRectMake(CGRectGetMaxX(self.contentView.frame), 0, CGRectGetHeight(self.frame), CGRectGetHeight(self.frame)))
-            _rightBackButton!.setImage(self.bgViewRightImage, forState: .Normal)
-            _rightBackButton!.addTarget(self, action: #selector(BWSwipeRevealCell.rightButtonTapped), forControlEvents: .TouchUpInside)
-            _rightBackButton!.tintColor = UIColor.whiteColor()
-            _rightBackButton!.contentMode = .Center
+            _rightBackButton = UIButton(frame: CGRect(x: self.contentView.frame.maxX, y: 0, width: self.frame.height, height: self.frame.height))
+            _rightBackButton!.setImage(self.bgViewRightImage, for: .normal)
+            _rightBackButton!.addTarget(self, action: #selector(BWSwipeRevealCell.rightButtonTapped), for: .touchUpInside)
+            _rightBackButton!.tintColor = UIColor.white
+            _rightBackButton!.contentMode = .center
             self.backView!.addSubview(_rightBackButton!)
         }
         return _rightBackButton
     }
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: .Subtitle, reuseIdentifier: reuseIdentifier)
+        super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
         let bgView: UIView = UIView(frame: self.frame)
         self.selectedBackgroundView = bgView
     }
@@ -71,15 +71,15 @@ public class BWSwipeRevealCell: BWSwipeCell {
         self.selectedBackgroundView = bgView
     }
     
-    public override func prepareForReuse() {
+    open override func prepareForReuse() {
         super.prepareForReuse()
     }
     
-    public override func layoutSubviews() {
+    open override func layoutSubviews() {
         super.layoutSubviews()
     }
     
-    public override func cleanUp() {
+    open override func cleanUp() {
         super.cleanUp()
         if self.shouldCleanUpBackView {
             _leftBackButton?.removeFromSuperview()
@@ -91,21 +91,21 @@ public class BWSwipeRevealCell: BWSwipeCell {
         }
     }
     
-    public override func didStartSwiping() {
+    open override func didStartSwiping() {
         super.didStartSwiping()
         self.backgroundView!.addSubview(self.backView!)
     }
     
-    public override func animateContentViewForPoint(point: CGPoint) {
+    open override func animateContentViewForPoint(_ point: CGPoint) {
         super.animateContentViewForPoint(point)
         if point.x > 0 {
             let frame = self.leftBackButton!.frame
             let minX = getBackgroundViewImagesMaxX(point.x)
-            let minY = CGRectGetMinY(frame)
-            self.leftBackButton!.frame = CGRectMake(minX, minY, CGRectGetWidth(frame), CGRectGetHeight(frame))
+            let minY = frame.minY
+            self.leftBackButton!.frame = CGRect(x: minX, y: minY, width: frame.width, height: frame.height)
             self.leftBackButton?.alpha = self.progress
-            UIView.transitionWithView(_leftBackButton!, duration: 0.13, options: .TransitionCrossDissolve, animations: {
-                if point.x >= CGRectGetHeight(self.frame) {
+            UIView.transition(with: _leftBackButton!, duration: 0.13, options: .transitionCrossDissolve, animations: {
+                if point.x >= self.frame.height {
                     self.backView?.backgroundColor = self.bgViewLeftColor
                 }
                 else {
@@ -115,11 +115,11 @@ public class BWSwipeRevealCell: BWSwipeCell {
         } else if point.x < 0 {
             let frame = self.rightBackButton!.frame
             let maxX = getBackgroundViewImagesMaxX(point.x)
-            let minY = CGRectGetMinY(frame)
-            self.rightBackButton!.frame = (CGRectMake(maxX, minY, CGRectGetWidth(frame), CGRectGetHeight(frame)))
+            let minY = frame.minY
+            self.rightBackButton!.frame = (CGRect(x: maxX, y: minY, width: frame.width, height: frame.height))
             self.rightBackButton?.alpha = self.progress
-            UIView.transitionWithView(_rightBackButton!, duration: 0.13, options: .TransitionCrossDissolve, animations: {
-                  if -point.x >= CGRectGetHeight(self.frame) {
+            UIView.transition(with: _rightBackButton!, duration: 0.13, options: .transitionCrossDissolve, animations: {
+                  if -point.x >= self.frame.height {
                       self.backView?.backgroundColor = self.bgViewRightColor
                   } else {
                       self.backView?.backgroundColor = self.bgViewInactiveColor
@@ -130,69 +130,69 @@ public class BWSwipeRevealCell: BWSwipeCell {
     
     // MARK: - Reveal Cell Animations
     
-    public override func animateCellSpringRelease() {
+    open override func animateCellSpringRelease() {
         super.animateCellSpringRelease()
         let pointX = self.contentView.frame.origin.x
-        UIView.animateWithDuration(self.animationDuration,
+        UIView.animate(withDuration: self.animationDuration,
             delay: 0,
-            options: .CurveLinear,
+            options: .curveLinear,
             animations: {
                 if pointX > 0 {
                     self.leftBackButton!.frame.origin.x = -self.threshold
                 } else if pointX < 0 {
-                    self.rightBackButton!.frame.origin.x = CGRectGetMaxX(self.frame)
+                    self.rightBackButton!.frame.origin.x = self.frame.maxX
                 }
             }, completion: nil)
     }
     
-    public override func animateCellSwipeThrough() {
+    open override func animateCellSwipeThrough() {
         super.animateCellSwipeThrough()
         let pointX = self.contentView.frame.origin.x
-        UIView.animateWithDuration(self.animationDuration,
+        UIView.animate(withDuration: self.animationDuration,
             delay: 0,
-            options: .CurveLinear,
+            options: .curveLinear,
             animations: {
                 if pointX > 0 {
-                    self.leftBackButton!.frame.origin.x = CGRectGetMaxX(self.frame)
+                    self.leftBackButton!.frame.origin.x = self.frame.maxX
                 } else if pointX < 0 {
                     self.rightBackButton!.frame.origin.x = -self.threshold
                 }
             }, completion: nil)
     }
     
-    public override func animateCellSlidingDoor() {
+    open override func animateCellSlidingDoor() {
         super.animateCellSlidingDoor()
         self.shouldCleanUpBackView = false
     }
     
     // MARK: - Reveal Cell
     
-    public func getBackgroundViewImagesMaxX(x:CGFloat) -> CGFloat {
+    open func getBackgroundViewImagesMaxX(_ x:CGFloat) -> CGFloat {
         if x > 0 {
             let frame = self.leftBackButton!.frame
-            if self.type == .SwipeThrough {
+            if self.type == .swipeThrough {
                 return self.contentView.frame.origin.x - frame.width
             } else {
-                return min(CGRectGetMinX(self.contentView.frame) - CGRectGetWidth(frame), 0)
+                return min(self.contentView.frame.minX - frame.width, 0)
             }
         } else {
             let frame = self.rightBackButton!.frame
-            if self.type == .SwipeThrough {
-                return CGRectGetMaxX(self.contentView.frame)
+            if self.type == .swipeThrough {
+                return self.contentView.frame.maxX
             } else {
-                return max(CGRectGetMaxX(self.frame) - CGRectGetWidth(frame), CGRectGetMaxX(self.contentView.frame))
+                return max(self.frame.maxX - frame.width, self.contentView.frame.maxX)
             }
         }
     }
     
-    public func leftButtonTapped () {
+    open func leftButtonTapped () {
         self.shouldCleanUpBackView = true
         self.animateCellSpringRelease()
         let delegate = self.delegate as? BWSwipeRevealCellDelegate
         delegate?.swipeCellActivatedAction?(self, isActionLeft: true)
     }
     
-    public func rightButtonTapped () {
+    open func rightButtonTapped () {
         self.shouldCleanUpBackView = true
         self.animateCellSpringRelease()
         let delegate = self.delegate as? BWSwipeRevealCellDelegate

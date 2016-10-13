@@ -11,50 +11,50 @@ import UIKit
 
 //Defines the interaction type of the table cell
 public enum BWSwipeCellType: Int {
-    case SwipeThrough = 0 // swipes with finger and animates through
-    case SpringRelease // resists pulling and bounces back
-    case SlidingDoor // swipe to a stopping position where underlying buttons can be revealed
+    case swipeThrough = 0 // swipes with finger and animates through
+    case springRelease // resists pulling and bounces back
+    case slidingDoor // swipe to a stopping position where underlying buttons can be revealed
 }
 
 public enum BWSwipeCellRevealDirection {
-    case None
-    case Both
-    case Right
-    case Left
+    case none
+    case both
+    case right
+    case left
 }
 
 public enum BWSwipeCellState {
-    case Normal
-    case PastThresholdLeft
-    case PastThresholdRight
+    case normal
+    case pastThresholdLeft
+    case pastThresholdRight
 }
 
 @objc public protocol BWSwipeCellDelegate: NSObjectProtocol {
-    optional func swipeCellDidStartSwiping(cell: BWSwipeCell)
-    optional func swipeCellDidSwipe(cell: BWSwipeCell)
-    optional func swipeCellWillRelease(cell: BWSwipeCell)
-    optional func swipeCellDidCompleteRelease(cell: BWSwipeCell)
-    optional func swipeCellDidChangeState(cell: BWSwipeCell)
+    @objc optional func swipeCellDidStartSwiping(_ cell: BWSwipeCell)
+    @objc optional func swipeCellDidSwipe(_ cell: BWSwipeCell)
+    @objc optional func swipeCellWillRelease(_ cell: BWSwipeCell)
+    @objc optional func swipeCellDidCompleteRelease(_ cell: BWSwipeCell)
+    @objc optional func swipeCellDidChangeState(_ cell: BWSwipeCell)
 }
 
-public class BWSwipeCell:UITableViewCell {
+open class BWSwipeCell:UITableViewCell {
     
     // The interaction type for this table cell
-    public var type:BWSwipeCellType = .SpringRelease
+    open var type:BWSwipeCellType = .springRelease
     
     // The allowable swipe direction(s)
-    public var revealDirection: BWSwipeCellRevealDirection = .Both
+    open var revealDirection: BWSwipeCellRevealDirection = .both
     
     // The current state of the cell (either normal or past a threshold)
-    public private(set) var state: BWSwipeCellState = .Normal
+    open fileprivate(set) var state: BWSwipeCellState = .normal
     
     // The point at which pan elasticity starts, and `state` changes. Defaults to the height of the `UITableViewCell` (i.e. when it form a perfect square)
-    public lazy var threshold: CGFloat = {
+    open lazy var threshold: CGFloat = {
         return self.frame.height
     }()
     
     // A number between 0 and 1 to indicate progress toward reaching threshold in the current swiping direction. Useful for changing UI gradually as the user swipes.
-    public var progress: CGFloat {
+    open var progress: CGFloat {
         get {
             let progress = abs(self.contentView.frame.origin.x) / self.threshold
             return (progress > 1) ? 1 : progress
@@ -62,18 +62,18 @@ public class BWSwipeCell:UITableViewCell {
     }
     
     // Should we allow the cell to be pulled past the threshold at all? (.SwipeThrough cells will ignore this)
-    public var shouldExceedThreshold: Bool = true
+    open var shouldExceedThreshold: Bool = true
     
     // Control how much elastic resistance there is past threshold, if it can be exceeded. Default is `0.7` and `1.0` would mean no elastic resistance
-    public var panElasticityFactor: CGFloat = 0.7
+    open var panElasticityFactor: CGFloat = 0.7
     
     // Length of the animation on release
-    public var animationDuration: Double = 0.2
+    open var animationDuration: Double = 0.2
     
     // BWSwipeCell Delegate
-    public weak var delegate: BWSwipeCellDelegate?
+    open weak var delegate: BWSwipeCellDelegate?
     
-    public lazy var releaseCompletionBlock:((Bool) -> Void)? = {
+    open lazy var releaseCompletionBlock:((Bool) -> Void)? = {
         return {
             [weak self] (finished: Bool) in
             
@@ -86,28 +86,28 @@ public class BWSwipeCell:UITableViewCell {
     
     // MARK: - Swipe Cell Functions
     
-    public func initialize() {
-        self.selectionStyle = .None
-        self.contentView.backgroundColor = UIColor.whiteColor()
+    open func initialize() {
+        self.selectionStyle = .none
+        self.contentView.backgroundColor = UIColor.white
         let panGestureRecognizer: UIPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(BWSwipeCell.handlePanGesture(_:)))
         panGestureRecognizer.delegate = self
         self.addGestureRecognizer(panGestureRecognizer)
         
         let backgroundView: UIView = UIView(frame: self.frame)
-        backgroundView.backgroundColor = UIColor.whiteColor()
+        backgroundView.backgroundColor = UIColor.white
         self.backgroundView = backgroundView
     }
     
-    public func cleanUp() {
-        self.state = .Normal
+    open func cleanUp() {
+        self.state = .normal
     }
     
-    public func handlePanGesture(panGestureRecognizer: UIPanGestureRecognizer) {
-        let translation: CGPoint = panGestureRecognizer.translationInView(panGestureRecognizer.view)
+    open func handlePanGesture(_ panGestureRecognizer: UIPanGestureRecognizer) {
+        let translation: CGPoint = panGestureRecognizer.translation(in: panGestureRecognizer.view)
         var panOffset: CGFloat = translation.x
         
         // If we have elasticity to consider, do some extra calculations for panOffset
-        if self.type != .SwipeThrough && abs(translation.x) > self.threshold {
+        if self.type != .swipeThrough && abs(translation.x) > self.threshold {
             if self.shouldExceedThreshold {
                 let offset: CGFloat = abs(translation.x)
                 panOffset = offset - ((offset - self.threshold) * self.panElasticityFactor)
@@ -119,15 +119,15 @@ public class BWSwipeCell:UITableViewCell {
         }
         
         // Start, continue or complete the swipe gesture
-        let actualTranslation: CGPoint = CGPointMake(panOffset, translation.y)
-        if panGestureRecognizer.state == .Began && panGestureRecognizer.numberOfTouches() > 0 {
-            let newTranslation = CGPointMake(self.contentView.frame.origin.x, 0)
-            panGestureRecognizer.setTranslation(newTranslation, inView: panGestureRecognizer.view)
+        let actualTranslation: CGPoint = CGPoint(x: panOffset, y: translation.y)
+        if panGestureRecognizer.state == .began && panGestureRecognizer.numberOfTouches > 0 {
+            let newTranslation = CGPoint(x: self.contentView.frame.origin.x, y: 0)
+            panGestureRecognizer.setTranslation(newTranslation, in: panGestureRecognizer.view)
             self.didStartSwiping()
             self.animateContentViewForPoint(newTranslation)
         }
         else {
-            if panGestureRecognizer.state == .Changed && panGestureRecognizer.numberOfTouches() > 0 {
+            if panGestureRecognizer.state == .changed && panGestureRecognizer.numberOfTouches > 0 {
                 self.animateContentViewForPoint(actualTranslation)
             }
             else {
@@ -136,22 +136,22 @@ public class BWSwipeCell:UITableViewCell {
         }
     }
     
-    public func didStartSwiping() {
+    open func didStartSwiping() {
         self.delegate?.swipeCellDidStartSwiping?(self)
     }
     
-    public func animateContentViewForPoint(point: CGPoint) {
-        if (point.x > 0 && self.revealDirection == .Left) || (point.x < 0 && self.revealDirection == .Right) || self.revealDirection == .Both {
-            self.contentView.frame = CGRectOffset(self.contentView.bounds, point.x, 0)
+    open func animateContentViewForPoint(_ point: CGPoint) {
+        if (point.x > 0 && self.revealDirection == .left) || (point.x < 0 && self.revealDirection == .right) || self.revealDirection == .both {
+            self.contentView.frame = self.contentView.bounds.offsetBy(dx: point.x, dy: 0)
             let previousState = state
             if point.x >= self.threshold {
-                self.state = .PastThresholdLeft
+                self.state = .pastThresholdLeft
             }
             else if point.x < -self.threshold {
-                self.state = .PastThresholdRight
+                self.state = .pastThresholdRight
             }
             else {
-                self.state = .Normal
+                self.state = .normal
             }
             
             if self.state != previousState {
@@ -160,17 +160,17 @@ public class BWSwipeCell:UITableViewCell {
             self.delegate?.swipeCellDidSwipe?(self)
         }
         else {
-            if (point.x > 0 && self.revealDirection == .Right) || (point.x < 0 && self.revealDirection == .Left) {
-                self.contentView.frame = CGRectOffset(self.contentView.bounds, 0, 0)
+            if (point.x > 0 && self.revealDirection == .right) || (point.x < 0 && self.revealDirection == .left) {
+                self.contentView.frame = self.contentView.bounds.offsetBy(dx: 0, dy: 0)
             }
         }
     }
     
-    public func resetCellPosition() {
+    open func resetCellPosition() {
         self.delegate?.swipeCellWillRelease?(self)
-        if self.type == .SpringRelease || self.state == .Normal {
+        if self.type == .springRelease || self.state == .normal {
             self.animateCellSpringRelease()
-        } else if self.type == .SlidingDoor {
+        } else if self.type == .slidingDoor {
             self.animateCellSlidingDoor()
         } else {
             self.animateCellSwipeThrough()
@@ -179,20 +179,20 @@ public class BWSwipeCell:UITableViewCell {
     
     // MARK: - Reset animations
     
-    public func animateCellSpringRelease() {
-        UIView.animateWithDuration(self.animationDuration,
+    open func animateCellSpringRelease() {
+        UIView.animate(withDuration: self.animationDuration,
             delay: 0,
-            options: .CurveEaseOut,
+            options: .curveEaseOut,
             animations: {
                 self.contentView.frame = self.contentView.bounds
             },
             completion: self.releaseCompletionBlock)
     }
     
-    public func animateCellSlidingDoor() {
-        UIView.animateWithDuration(self.animationDuration,
+    open func animateCellSlidingDoor() {
+        UIView.animate(withDuration: self.animationDuration,
             delay: 0,
-            options: .AllowUserInteraction,
+            options: .allowUserInteraction,
             animations: {
                 let pointX = self.contentView.frame.origin.x
                 if pointX > 0 {
@@ -204,10 +204,10 @@ public class BWSwipeCell:UITableViewCell {
             completion: self.releaseCompletionBlock)
     }
     
-    public func animateCellSwipeThrough() {
-        UIView.animateWithDuration(self.animationDuration,
+    open func animateCellSwipeThrough() {
+        UIView.animate(withDuration: self.animationDuration,
             delay: 0,
-            options: UIViewAnimationOptions.CurveLinear,
+            options: UIViewAnimationOptions.curveLinear,
             animations: {
                 let direction:CGFloat = (self.contentView.frame.origin.x > 0) ? 1 : -1
                 self.contentView.frame.origin.x = direction * (self.contentView.bounds.width + self.threshold)
@@ -226,19 +226,19 @@ public class BWSwipeCell:UITableViewCell {
         self.initialize()
     }
     
-    public override func prepareForReuse() {
+    open override func prepareForReuse() {
         super.prepareForReuse()
         self.cleanUp()
     }
     
-    public override func setSelected(selected: Bool, animated: Bool) {
+    open override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
     
-    public override func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
-        if gestureRecognizer.isKindOfClass(UIPanGestureRecognizer) && self.revealDirection != .None {
+    open override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if gestureRecognizer.isKind(of: UIPanGestureRecognizer.self) && self.revealDirection != .none {
             let pan:UIPanGestureRecognizer = gestureRecognizer as! UIPanGestureRecognizer
-            let translation: CGPoint = pan.translationInView(self.superview)
+            let translation: CGPoint = pan.translation(in: self.superview)
             return (fabs(translation.x) / fabs(translation.y) > 1) ? true : false
         }
         return false
