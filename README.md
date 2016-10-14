@@ -5,6 +5,8 @@
 
 ### Using the library
 
+**Note: Use version 1.0.1 for Swift 2.3 support and version 2.0.0 or higher for Swift 3 support **
+
 There are two main classes available - `BWSwipeCell` and `BWSwipeRevealCell`
 
 **BWSwipeCell** - Only contains the pan gesture handling, and is useful mainly for heavy customization through subclassing if all you need is a leg up on swipe interactions
@@ -117,7 +119,7 @@ Some brief ideas on ways to improve this library
 - Fix bugs
 
 ##### v 3.0.0
-- [See Github Milestone](https://github.com/bitwit/BWSwipeRevealCell/milestones/Version%202.0.0)
+- [See Github Milestone](https://github.com/bitwit/BWSwipeRevealCell/milestones/Version%203.0.0)
 
 ##### v x.0.0 (a.k.a. Ideas. PRs welcome.)
 - Customizable interaction per side (i.e. left .SwipeThrough, right .SlidingDoor)
