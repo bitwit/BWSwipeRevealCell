@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		752EDC641BF64B5B007ED36D /* BWSwipeRevealCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 752EDC631BF64B5B007ED36D /* BWSwipeRevealCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		752EDC6C1BF65169007ED36D /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 752EDC6B1BF65169007ED36D /* README.md */; };
 		752EDC6F1BF654F8007ED36D /* BWSwipeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752EDC6D1BF654F8007ED36D /* BWSwipeCell.swift */; };
 		752EDC701BF654F8007ED36D /* BWSwipeRevealCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752EDC6E1BF654F8007ED36D /* BWSwipeRevealCell.swift */; };
 		752EDC781BF65880007ED36D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752EDC771BF65880007ED36D /* AppDelegate.swift */; };
@@ -17,7 +16,6 @@
 		752EDC821BF65880007ED36D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 752EDC801BF65880007ED36D /* Main.storyboard */; };
 		752EDC871BF65880007ED36D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 752EDC851BF65880007ED36D /* LaunchScreen.storyboard */; };
 		752EDC8D1BF659C7007ED36D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 752EDC8C1BF659C7007ED36D /* Assets.xcassets */; };
-		752EDC8F1BF65C68007ED36D /* example.gif in Resources */ = {isa = PBXBuildFile; fileRef = 752EDC8E1BF65C68007ED36D /* example.gif */; };
 		75ABE4201C0F88AD00F42894 /* BWSwipeRevealCell.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 752EDC601BF64B5B007ED36D /* BWSwipeRevealCell.framework */; };
 		75ABE4221C0F8AF300F42894 /* BWSwipeRevealCell.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 752EDC601BF64B5B007ED36D /* BWSwipeRevealCell.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -232,7 +230,6 @@
 				752EDC871BF65880007ED36D /* LaunchScreen.storyboard in Resources */,
 				752EDC8D1BF659C7007ED36D /* Assets.xcassets in Resources */,
 				752EDC821BF65880007ED36D /* Main.storyboard in Resources */,
-				752EDC8F1BF65C68007ED36D /* example.gif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -243,7 +240,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				752EDC6C1BF65169007ED36D /* README.md in Sources */,
 				752EDC701BF654F8007ED36D /* BWSwipeRevealCell.swift in Sources */,
 				752EDC6F1BF654F8007ED36D /* BWSwipeCell.swift in Sources */,
 			);
