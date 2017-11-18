@@ -102,7 +102,7 @@ open class BWSwipeCell:UITableViewCell {
         self.state = .normal
     }
     
-    open func handlePanGesture(_ panGestureRecognizer: UIPanGestureRecognizer) {
+    @objc open func handlePanGesture(_ panGestureRecognizer: UIPanGestureRecognizer) {
         let translation: CGPoint = panGestureRecognizer.translation(in: panGestureRecognizer.view)
         var panOffset: CGFloat = translation.x
         

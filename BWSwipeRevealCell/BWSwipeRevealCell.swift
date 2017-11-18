@@ -185,14 +185,14 @@ open class BWSwipeRevealCell: BWSwipeCell {
         }
     }
     
-    open func leftButtonTapped () {
+    @objc open func leftButtonTapped () {
         self.shouldCleanUpBackView = true
         self.animateCellSpringRelease()
         let delegate = self.delegate as? BWSwipeRevealCellDelegate
         delegate?.swipeCellActivatedAction?(self, isActionLeft: true)
     }
     
-    open func rightButtonTapped () {
+    @objc open func rightButtonTapped () {
         self.shouldCleanUpBackView = true
         self.animateCellSpringRelease()
         let delegate = self.delegate as? BWSwipeRevealCellDelegate
