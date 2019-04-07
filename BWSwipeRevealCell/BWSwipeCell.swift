@@ -207,7 +207,7 @@ open class BWSwipeCell:UITableViewCell {
     open func animateCellSwipeThrough() {
         UIView.animate(withDuration: self.animationDuration,
             delay: 0,
-            options: UIViewAnimationOptions.curveLinear,
+            options: UIView.AnimationOptions.curveLinear,
             animations: {
                 let direction:CGFloat = (self.contentView.frame.origin.x > 0) ? 1 : -1
                 self.contentView.frame.origin.x = direction * (self.contentView.bounds.width + self.threshold)
@@ -216,7 +216,7 @@ open class BWSwipeCell:UITableViewCell {
     
     // MARK: - UITableViewCell Overrides
     
-    public override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    public override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.initialize()
     }
@@ -239,7 +239,7 @@ open class BWSwipeCell:UITableViewCell {
         if gestureRecognizer.isKind(of: UIPanGestureRecognizer.self) && self.revealDirection != .none {
             let pan:UIPanGestureRecognizer = gestureRecognizer as! UIPanGestureRecognizer
             let translation: CGPoint = pan.translation(in: self.superview)
-            return (fabs(translation.x) / fabs(translation.y) > 1) ? true : false
+            return (abs(translation.x) / abs(translation.y) > 1) ? true : false
         }
         return false
     }
