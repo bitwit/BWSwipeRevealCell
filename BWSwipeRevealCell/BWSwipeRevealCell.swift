@@ -59,7 +59,7 @@ open class BWSwipeRevealCell: BWSwipeCell {
         return _rightBackButton
     }
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
         let bgView: UIView = UIView(frame: self.frame)
         self.selectedBackgroundView = bgView
